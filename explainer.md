@@ -19,7 +19,7 @@ Secondary use case of the Depth API would be to provide applications with data t
 
 ```javascript
 const session = await navigator.xr.requestSession(“immersive-ar”, {
-  requiredFeatures: [“depth”]
+  requiredFeatures: [“depth-sensing”]
 });
 ```
 
@@ -67,13 +67,18 @@ const depth_coordinates_view = [depth_coordinates_view_normalized[0] * viewport.
  - GPU access:
 
 ```javascript
+
+// Grab the information from the XRDepthInformation interface:
+const uvTransform = depthInfo.normTextureFromNormView.matrix;
+const dataBuffer = depthInfo.data;
+
 const program = ...; // Linked WebGLProgam program.
 const u_DepthTextureLocation = gl.getUniformLocation(program, "u_DepthTexture");
 const u_UVTransformLocation = gl.getUniformLocation(program, "u_UVTransform");
 
 // The application could upload the depth information like so:
 
-// gl.TexImage2D expects Uint8Array when using gl.UNSIGNED_BYTE
+// gl.TexImage2D expects Uint8Array when using gl.UNSIGNED_BYTE, convert:
 const depthBuffer = new Uint8Array(dataBuffer.buffer,
                                    dataBuffer.byteOffset,
                                    dataBuffer.byteLength);
@@ -85,13 +90,11 @@ gl.TexImage2D(GL_TEXTURE_2D, 0, gl.LUMINANCE_ALPHA, depthInfo.width,
 // Subsequently, we need to activate the texture unit (in this case, unit 0),
 // and set depth texture sampler to 0:
 gl.activeTexture(gl.TEXTURE0);
-gl.uniform1i(u_DepthTextureLocation, 0);  // Location of the uniform variable
-                                          // can be obtained by gl.
+gl.uniform1i(u_DepthTextureLocation, 0);
 
 // In addition, the UV transform is necessary to correctly index into the depth map:
 gl.uniformMatrix4fv(u_UVTransformLocation, false,
-                    depthInfo.normTextureFromNormView.matrix);
-
+                    uvTransform);
 ```
 
 The depth data available to the WebGL shaders will then be packed into luminance and alpha components of the texels. *Note*: data on the GPU is provided in millimetres.
