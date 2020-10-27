@@ -23,6 +23,11 @@ spec:webxr device api - level 1; type:dfn; for:/; text:xr device
 </pre>
 
 <pre class="anchors">
+spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
+    type: dfn; text: capable of supporting; url: capable-of-supporting
+    type: dfn; text: feature descriptor; url: feature-descriptor
+    type: dfn; text: feature policy; url: feature-policy
+    type: dfn; text: inline XR device; url: inline-xr-device
 </pre>
 
 <style>
@@ -94,6 +99,11 @@ Initialization {#initialization}
 Feature descriptor {#feature-descriptor}
 ------------------
 
+The applications can request that depth sensing be enabled on an XRSession by passing an appropriate [=feature descriptor=]. This module introduces new string - <dfn>depth-sensing</dfn>, as a new valid feature descriptor for depth sensing feature.
+
+A device is [=capable of supporting=] the depth sensing feature if the device exposes [=native depth sensing=] capability. The [=inline XR device=] MUST NOT be treated as [=capable of supporting=] the depth sensing feature.
+
+The depth sensing feature is subject to [=feature policy=] and requires <code>"xr-spatial-tracking"</code> policy to be allowed on the requesting document's origin.
 
 Obtaining depth data {#obtaining-data}
 ====================
