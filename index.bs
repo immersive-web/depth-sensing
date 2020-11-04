@@ -28,6 +28,18 @@ spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
     type: dfn; text: feature descriptor; url: feature-descriptor
     type: dfn; text: feature policy; url: feature-policy
     type: dfn; text: inline XR device; url: inline-xr-device
+    type: interface; text: XRFrame; url: xrframe-interface
+    for: XRFrame;
+        type: dfn; text: time; url: xrframe-time
+    type: interface; text: XRSession; url: xrsession-interface
+    for: XRSession;
+        type: dfn; text: mode; url: xrsession-mode
+        type: dfn; text: XR device; url: xrsession-xr-device
+    for: XRView;
+        type: dfn; text: frame time; url: xrview-frame-time
+    type: dfn; text: XR device; url: xr-device
+    for: XR device;
+        type: dfn; text: list of enabled features; url: xr-device-list-of-enabled-features
 </pre>
 
 <style>
@@ -127,7 +139,40 @@ interface XRDepthInformation {
 
 </script>
 
+The {{XRDepthInformation/data}} attribute contains depth buffer information in raw format, suitable for uploading to a WebGL texture. The data is stored in column-major format, with each 2-byte entry containing unsigned integer corresponding to depth in millimeters at some specific coordinates.
 
+The {{XRDepthInformation/width}} attribute contains width of the {{XRDepthInformation/data}} buffer (i.e. number of columns).
+
+The {{XRDepthInformation/height}} attribute contains height of the {{XRDepthInformation/data}} buffer (i.e. number of rows).
+
+The {{XRDepthInformation/normTextureFromNormView}} attribute contains a {{XRRigidTransform}} that needs to be used when indexing into {{XRDepthInformation/data}}. The transformation that the matrix represents changes the coordinate system from normalized view coordinates to normalized texture coordinates.
+
+<div class="example">
+
+TODO: show how to convert from screen coordinates to depth buffer coordinates & vice versa.
+
+</div>
+
+The {{XRDepthInformation/getDepth(column, row)}} method can be used to [=obtain depth at coordinates=].
+
+Each {{XRDepthInformation}} has an associated ...
+
+<div class="algorithm" data-algorithm="create-depth-information">
+
+In order to <dfn>create a depth information instance</dfn>...
+
+</div>
+
+<div class="algorithm" data-algorithm="obtain-depth-at-coordinates">
+
+When {{XRDepthInformation/getDepth(column, row)}} method is invoked on an {{XRDepthInformation}} |depthInformation| with |column|, |row|, the user agent MUST <dfn>obtain depth at coordinates</dfn> by running the following steps:
+    1. If |column| is greater than or equal to |depthInformation|'s {{XRDepthInformation/width}}, [=exception/throw=] {{NotAllowedError}} and abort these steps.
+    1. If |row| is greater than or equal to |depthInformation|'s {{XRDepthInformation/height}}, [=exception/throw=] {{NotAllowedError}} and abort these steps.
+    1. Let |index| be equal to |row| * {{XRDepthInformation/width}} + |column|.
+    1. Let |depthInMillimeters| be equal to a value found at index |index| in {{XRDepthInformation/data}}.
+    1. Return |depthInMillimeters| divided by <code>1000.0</code>.
+
+</div>
 
 <script type="idl">
 
@@ -136,6 +181,19 @@ partial interface XRFrame {
 };
 
 </script>
+
+The <dfn method for="XRFrame">getDepthInformation(view)</dfn> method, when invoked on an {{XRFrame}}, signals that the application wants to [=obtain depth information=] relevant for the frame.
+
+<div class="algorithm" data-algorithm="obtain-depth-information">
+
+When {{XRFrame/getDepthInformation(view)}} method is invoked on an {{XRFrame}} |frame| with an {{XRView}} |view|, the user agent MUST <dfn>obtain depth information</dfn> by running the following steps:
+
+  1. Let |session| be |frame|'s {{XRFrame/session}}.
+  1. If [=depth-sensing=] feature descriptor is not [=list/contain|contained=] in the |session|'s [=XRSession/XR device=]'s [=XR device/list of enabled features=] for |session|'s [=XRSession/mode=], [=exception/throw=] a {{NotSupportedError}} and abort these steps.
+  1. If |frame|'s [=XRFrame/time=] does not match |view|'s [=XRView/frame time=], [=exception/throw=] an {{InvalidStateError}} and abort these steps.
+
+
+</div>
 
 Interpreting the results {#results-interpretation}
 ========================
