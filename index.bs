@@ -100,6 +100,8 @@ Introduction {#intro}
 
 <section class="non-normative">
 
+As Augmented Reality becomes more prevalent, new features are being introduced by the native APIs that enable accessing more detailed information about the environment in which the user is located. Depth Sensing API brings one such capability to WebXR Device API, allowing authors of WebXR-powered experiences to obtain information about the distance from the user’s device to the real world geometry in the user’s environment.
+
 </section>
 
 Terminology {#terminology}
@@ -139,7 +141,11 @@ interface XRDepthInformation {
 
 </script>
 
-The {{XRDepthInformation/data}} attribute contains depth buffer information in raw format, suitable for uploading to a WebGL texture. The data is stored in column-major format, with each 2-byte entry containing unsigned integer corresponding to depth in millimeters at some specific coordinates.
+The {{XRDepthInformation/data}} attribute contains depth buffer information in raw format, suitable for uploading to a WebGL texture. The data is stored in column-major format, with each 2-byte entry containing unsigned integer corresponding to distance from the [=XRDepthInformation/view=]'s near plane, in millimeters.
+
+Issue(immersive-web/depth-sensing#6): Accessing raw data could potentially need to have a way of knowing what is the underlying data type and how to convert from the numeric value to a value expressed in meters. This is to ensure that we do not force the implementers to convert the data they are able to obtain from the underlying XR devices.
+
+Note: Applications SHOULD NOT attempt to change the contents of {{XRDepthInformation/data}} array as this can lead to incorrect results returned by the {{XRDepthInformation/getDepth(column, row)}} method.
 
 The {{XRDepthInformation/width}} attribute contains width of the {{XRDepthInformation/data}} buffer (i.e. number of columns).
 
@@ -147,19 +153,23 @@ The {{XRDepthInformation/height}} attribute contains height of the {{XRDepthInfo
 
 The {{XRDepthInformation/normTextureFromNormView}} attribute contains a {{XRRigidTransform}} that needs to be used when indexing into {{XRDepthInformation/data}}. The transformation that the matrix represents changes the coordinate system from normalized view coordinates to normalized texture coordinates.
 
-<div class="example">
-
-TODO: show how to convert from screen coordinates to depth buffer coordinates & vice versa.
-
-</div>
-
 The {{XRDepthInformation/getDepth(column, row)}} method can be used to [=obtain depth at coordinates=].
 
-Each {{XRDepthInformation}} has an associated ...
+Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> that stores {{XRView}} from which the depth information instance was created.
 
 <div class="algorithm" data-algorithm="create-depth-information">
 
-In order to <dfn>create a depth information instance</dfn>...
+In order to <dfn>create a depth information instance</dfn> given {{XRFrame}} |frame| and {{XRView}} |view|, the user agent MUST run the following steps:
+    1. Let |result| be a new instance of {{XRDepthInformation}}.
+    1. Let |time| be |frame|'s [=XRFrame/time=].
+    1. Let |device| be the |session|'s [=XRSession/XR device=].
+    1. Let |nativeDepthInformation| be a result of querying |device| for the depth information valid as of |time|, for specified |view|.
+    1. Initialize |result|'s {{XRDepthInformation/width}} to the width of the depth buffer returned in |nativeDepthInformation|.
+    1. Initialize |result|'s {{XRDepthInformation/height}} to the height of the depth buffer returned in |nativeDepthInformation|.
+    1. Initialize |result|'s {{XRDepthInformation/normTextureFromNormView}} to a new {{XRRigidTransform}} that performs a coordinate system change from normalized view coordinates to normalized texture coordinates. This transform should <code>z</code> coordinate of the transformed 3D vector unaffected.
+    1. Initialize |result|'s {{XRDepthInformation/data}} to the raw depth buffer returned in |nativeDepthInformation|.
+    1. Initialize |result|'s [=XRDepthInformation/view=] to |view|.
+    1. Return |result|.
 
 </div>
 
@@ -168,7 +178,7 @@ In order to <dfn>create a depth information instance</dfn>...
 When {{XRDepthInformation/getDepth(column, row)}} method is invoked on an {{XRDepthInformation}} |depthInformation| with |column|, |row|, the user agent MUST <dfn>obtain depth at coordinates</dfn> by running the following steps:
     1. If |column| is greater than or equal to |depthInformation|'s {{XRDepthInformation/width}}, [=exception/throw=] {{NotAllowedError}} and abort these steps.
     1. If |row| is greater than or equal to |depthInformation|'s {{XRDepthInformation/height}}, [=exception/throw=] {{NotAllowedError}} and abort these steps.
-    1. Let |index| be equal to |row| * {{XRDepthInformation/width}} + |column|.
+    1. Let |index| be equal to |row| multiplied by {{XRDepthInformation/width}} & added to |column|.
     1. Let |depthInMillimeters| be equal to a value found at index |index| in {{XRDepthInformation/data}}.
     1. Return |depthInMillimeters| divided by <code>1000.0</code>.
 
@@ -190,18 +200,24 @@ When {{XRFrame/getDepthInformation(view)}} method is invoked on an {{XRFrame}} |
 
   1. Let |session| be |frame|'s {{XRFrame/session}}.
   1. If [=depth-sensing=] feature descriptor is not [=list/contain|contained=] in the |session|'s [=XRSession/XR device=]'s [=XR device/list of enabled features=] for |session|'s [=XRSession/mode=], [=exception/throw=] a {{NotSupportedError}} and abort these steps.
+  1. If |frame|'s [=XRFrame/active=] boolean is <code>false</code>, throw an {{InvalidStateError}} and abort these steps.
   1. If |frame|'s [=XRFrame/time=] does not match |view|'s [=XRView/frame time=], [=exception/throw=] an {{InvalidStateError}} and abort these steps.
-
+  1. Let |depthInformation| be a result of [=create a depth information instance|creating a depth information instance=] given |frame| and |view|.
+  1. Return |depthInformation|.
 
 </div>
 
 Interpreting the results {#results-interpretation}
 ========================
 
+Issue: Fill this out.
+
 Native device concepts {#native-device-concepts} 
 ======================
 
 <section class="non-normative">
+
+Issue: Fill this out.
 
 </section>
 
@@ -209,6 +225,8 @@ Privacy & Security Considerations {#privacy-security}
 =================================
 
 <section class="non-normative">
+
+Issue: Fill this out.
 
 </section>
 
