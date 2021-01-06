@@ -184,7 +184,7 @@ enum XRDepthSensingUsage {
   "gpu-optimized"
 };
 
-enum XRDepthFormat {
+enum XRDepthDataFormat {
   // Has to be supported everywhere:
   "luminance-alpha", // internal_format = LUMINANCE_ALPHA, type = UNSIGNED_BYTE,
                      // 2 bytes per pixel, unpack via dot([R, A], [255.0, 256*255.0])
@@ -192,22 +192,22 @@ enum XRDepthFormat {
   "float32",         // internal_format = R32F, type = FLOAT
 };
 
-// Post-session-creation, the depth sensing state needs to be configured
-// with the desired data format.
+// At session creation, the depth sensing API needs to be configured
+// with the desired usage and data format. The user agent will first select
+// the lowest-indexed depth sensing usage that it supports, and then attempt
+// to select the lowest-indexed depth data format. If the user agent is
+// unable to select usage and data format that it supports, the depth sensing
+// will not be enabled on a session - for sessions where depth sensing is
+// listed as required feature, the session creation will fail.
 dictionary XRDepthSensingStateInit {
-  XRDepthSensingUsage usage = "cpu-optimized";
-  XRDepthFormat depthFormat = "luminance-alpha";
+  sequence<XRDepthSensingUsage> depthSensingUsagePreference;
+  sequence<XRDepthDataFormat> depthDataFormatPreference;
 };
 
 partial interface XRSession {
   // Non-null iff depth-sensing is enabled:
-  readonly attribute XRDepthFormat? preferredDepthFormat;
-  readonly attribute XRDepthSensingUsage? preferredDepthSensingUsage;
-
-  // Can be called iff depth-sensing is enabled, will throw if unsupported format is passed in.
-  // The user agent can reject session creation if the desired usage is not supported.
-  // The user agent can support reconfiguring a session, but that is not required.
-  Promise<void> updateDepthSensingState(optional XRDepthSensingStateInit state = {});
+  readonly attribute XRDepthDataFormat? depthDataFormat;
+  readonly attribute XRDepthSensingUsage? depthSensingUsage;
 };
 
 partial interface XRFrame {
