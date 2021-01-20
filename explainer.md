@@ -19,26 +19,28 @@ Secondary use case of the Depth API would be to provide applications with data t
 
 ```javascript
 const session = await navigator.xr.requestSession(“immersive-ar”, {
-  requiredFeatures: [“depth-sensing”]
+  requiredFeatures: [“depth-sensing”],
+  depthSensing: {
+    usagePreference: ["cpu-optimized", "gpu-optimized"],
+    formatPreference: ["luminance-alpha", "float32"]
+  }
 });
 ```
 
-2. Configure the session to set the depth sensing usage and data format.
+Note that the usage and format preferences should omit values that the site knows it can't support in advance. In addition, only the `"luminance-alpha"` data format is guaranteed to be supported. User agents can optionally support more formats if they choose so. User agents that support depth-sensing API should also support at least one usage mode.
 
-The application can query the user agent's preferred usage (`"cpu-optimized"` or `"gpu-optimized"`) and format (`"luminance-alpha"` or `"float32"`) by accessing `session.preferredDepthSensingUsage` & `session.preferredDepthFormat`:
+2. Inspect the usage and format that was selected by the user agent & react appropriately:
 
 ```javascript
-await session.updateDepthSensingState({
-  usage: session.preferredDepthSensingUsage,
-  depthFormat: session.preferredDepthFormat
-});
+console.log(session.depthUsage);
+console.log(session.depthFormat);
+
+// Other setup, for example prepare appropriate shader depending on
+// the depth data format if using WebGL to access the data.
 ```
 
-Alternatively, the application can configure the depth sensing API using the usage and format that suits its needs, but that may result in the extra work done by the user agent in case the specified usage and format does not match the underlying platform's preferences.
-
-In addition, only the `"luminance-alpha"` data format is guaranteed to be supported. User agents can optionally support more formats if they choose  so.
-
-3. Within requestAnimationFrame() callback, query XRFrame for the currently available XRDepthInformation:
+3. Retrieve & use the data. Irrespective of the usage, `XRDepthInformation` & derived interfaces are only valid within the requestAnimationFrame() callback (i.e. only if the `XRFrame` is `active` and `animated`) in which they were obtained.
+  - `"cpu-optimized"` usage mode:
 
 ```javascript
 const view = ...;  // Obtained from a viewer pose.
@@ -47,16 +49,9 @@ const depthInfo = frame.getDepthInformation(view);
 if(depthInfo == null) {
   ... // Handle the case where current frame does not carry depth information.
 }
-```
 
-**Note**: the depth information will not be retrievable until the session is successfully configured via the `updateDepthSensingState()` method.
-
-4. Use the data. Irrespective of the usage, `XRDepthInformation` is only valid within the requestAnimationFrame() callback (i.e. only if the `XRFrame` is `active` and `animated`).
-  - `"cpu-optimized"` usage mode:
-
-```javascript
 // Obtain the depth at (x, y) depth buffer coordinate:
-const depthInMeters = depthInfo.getDepth(x, y);
+const depthInMeters = depthInfo.getDepthInMeters(x, y);
 ```
 
 **Note**: The depth buffer coordinates may not correspond to screen space
@@ -81,29 +76,39 @@ const depth_coordinates_view = [depth_coordinates_view_normalized[0] * viewport.
 // coordinates
 ```
 
-Alternatively, the depth data is also available via the `depthInfo.data` attribute. The entries are stored in a row-major order, and the entry size & data format is determined by the depth format set when configuring depth sensing API. The raw values obtained from the buffer can be converted to meters by multiplying the value by `depthInfo.rawValueToMeters`.
+Alternatively, the depth data is also available via the `depthInfo.data` attribute. The entries are stored in a row-major order, without padding, and the entry size & data format is determined by the depth format that can be queried from the XRSession. The raw values obtained from the buffer can be converted to meters by multiplying the value by `depthInfo.rawValueToMeters`.
 
 For example, to access the data at row `r`, column `c` of the buffer that has `"luminance-alpha"` format, the app can use:
 ```js
+const uint16Data = new Uint16Array(depthInfo.data.buffer,
+                                   depthInfo.data.byteOffset,
+                                   depthInfo.data.byteLength);
+
 const index = c + r * depthInfo.width;
-const depthInMetres = depthInfo.data.getUint16(index) * depthInfo.rawValueToMeters;
+const depthInMetres = uint16Data[index] * depthInfo.rawValueToMeters;
 ```
 
-If the data format was set to `"float32"`, the data could be accessed similarly (note that the only difference is the `getFloat32()` method used on a `DataView` instance):
+If the data format was set to `"float32"`, the data could be accessed similarly (note that the only difference is that the data buffer is interpreted as containing float32s):
 ```js
+const float32Data = new Float32Array(depthInfo.data.buffer,
+                                     depthInfo.data.byteOffset,
+                                     depthInfo.data.byteLength);
+
 const index = c + r * depthInfo.width;
-const depthInMetres = depthInfo.data.getFloat32(index) * depthInfo.rawValueToMeters;
+const depthInMetres = float32Data[index] * depthInfo.rawValueToMeters;
 ```
 
-Both of the above examples are equivalent to calling `depthInfo.getDepth(c, r)`.
+Both of the above examples are equivalent to calling `depthInfo.getDepthInMeters(c, r)`.
 
-**Note**: `XRDepthInformation`'s `data`, `width` & `height` attributes, and `getDepth()` method are only accessible if the depth API was configured with mode set to `"cpu-optimized"`.
+**Note**: `XRFRame`'s `getDepthInformation()` method will only return a result if the depth API was configured with mode set to `"cpu-optimized"`. 
 
- - `"gpu-optimized"` mode:
+ - `"gpu-optimized"` usage mode:
 
 ```javascript
-
+const view = ...;  // Obtained from a viewer pose.
 const xrWebGLBinding = ...; // XRWebGLBinding created for the current session and GL context
+
+const depthInfo = xrWebGLBinding.getDepthInformation(view);
 
 // Grab the information from the XRDepthInformation interface:
 const uvTransform = depthInfo.normTextureFromNormView.matrix;
@@ -113,10 +118,7 @@ const u_DepthTextureLocation = gl.getUniformLocation(program, "u_DepthTexture");
 const u_UVTransformLocation = gl.getUniformLocation(program, "u_UVTransform");
 const u_RawValueToMeters = gl.getUniformLocation(program, "u_RawValueToMeters");
 
-// The application can access upload the depth information like so:
-const depthTexture = xrWebGLBinding.getDepthTexture(depthInfo);
-
-gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+gl.bindTexture(gl.TEXTURE_2D, depthInfo.texture);
 
 // Subsequently, we need to activate the texture unit (in this case, unit 0),
 // and set depth texture sampler to 0:
@@ -159,7 +161,7 @@ void main(void) {
 }
 ```
 
-**Note**: `XRWebGLBinding`'s `getDepthTexture()` method will only return a result if the depth API was configured with mode set to `"gpu-optimized"`. Also note that it is possible for the application to configure the depth API using a data format that cannot be uploaded to the GPU with the provided binding (for example, `"float32"` data format on a WebGL1 context).
+**Note**: `XRWebGLBinding`'s `getDepthInformation()` method will only return a result if the depth API was configured with mode set to `"gpu-optimized"`. Also note that it is possible for the application to configure the depth API using a data format that cannot be uploaded to the GPU with the provided binding (for example, `"float32"` data format on a WebGL1 context) - in this case, the call to `XRWebGLBinding.getDepthInformation()` should fail.
 
 ### Interpreting the data
 
@@ -170,7 +172,7 @@ The returned depth value is a distance from the camera plane to the observed rea
 </p>
 
 ```javascript
-let depthValueInMeters = depthInfo.getDepth(x, y);
+let depthValueInMeters = depthInfo.getDepthInMeters(x, y);
   // Where x, y - image coordinates of point a.
 ```
 
@@ -179,7 +181,7 @@ let depthValueInMeters = depthInfo.getDepth(x, y);
 The comments are left in place to provide additional context on the API to the readers of the IDL and should also be repeated in the explainer text above.
 
 ```webidl
-enum XRDepthSensingUsage {
+enum XRDepthUsage {
   "cpu-optimized",
   "gpu-optimized"
 };
@@ -199,21 +201,31 @@ enum XRDepthDataFormat {
 // unable to select usage and data format that it supports, the depth sensing
 // will not be enabled on a session - for sessions where depth sensing is
 // listed as required feature, the session creation will fail.
-dictionary XRDepthSensingStateInit {
-  sequence<XRDepthSensingUsage> depthSensingUsagePreference;
-  sequence<XRDepthDataFormat> depthDataFormatPreference;
+dictionary XRDepthStateInit {
+  sequence<XRDepthUsage> usagePreference;
+  sequence<XRDepthDataFormat> dataFormatPreference;
+};
+
+partial dictionary XRSessionInit {
+  XRDepthStateInit? depthSensing;
 };
 
 partial interface XRSession {
   // Non-null iff depth-sensing is enabled:
+  readonly attribute XRDepthUsage? depthUsage;
   readonly attribute XRDepthDataFormat? depthDataFormat;
-  readonly attribute XRDepthSensingUsage? depthSensingUsage;
 };
 
 partial interface XRFrame {
-  // Throws if depth sensing state was never updated,
-  // returns null if the view does not have a corresponding depth buffer.
-  XRDepthInformation? getDepthInformation(XRView view);
+  // Must succeed when the depth API was initialized as "cpu-optimized". Otherwise, must throw.
+  // Returns null if the view does not have a corresponding depth buffer.
+  XRCPUDepthInformation? getDepthInformation(XRView view);
+};
+
+partial interface XRWebGLBinding {
+  // Must succeed when the depth API was initialized as "gpu-optimized". Otherwise, must throw.
+  // Returns null if the view does not have a corresponding depth buffer.
+  XRWebGLDepthInformation? getDepthInformation(XRView view);
 };
 
 [SecureContext, Exposed=Window]
@@ -221,21 +233,23 @@ interface XRDepthInformation {
   // All methods / attributes are accessible only when the frame
   // that the depth information originated from is active and animated.
 
-  [SameObject] readonly attribute DataView data;
   readonly attribute unsigned long width;
   readonly attribute unsigned long height;
 
-  float getDepth(unsigned long column, unsigned long row);
-
-  // Must be valid irrespective of initialization hint:
   [SameObject] readonly attribute XRRigidTransform normTextureFromNormView;
   readonly attribute float rawValueToMeters;
 };
 
-partial interface XRWebGLBinding {
-  // Must succeed when the depth API was initialized as "gpu-optimized". Otherwise, must throw.
-  // Returns opaque texture, its format is determined by the current depth sensing state.
-  WebGLTexture? getDepthTexture(XRDepthInformation depthInformation);
+interface XRCPUDepthInformation : XRDepthInformation {
+  // Data format is determined by session's depthDataFormat attribute.
+  [SameObject] readonly attribute ArrayBuffer data;
+
+  float getDepthInMeters(unsigned long column, unsigned long row);
+};
+
+interface XRWebGLDepthInformation : XRDepthInformation {
+  // Opaque texture, its format is determined by session's depthDataFormat attribute.
+  [SameObject] readonly attribute WebGLTexture texture;
 };
 ```
 
