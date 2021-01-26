@@ -7,7 +7,7 @@ all: index.html
 index.html: index.bs
 ifndef LOCAL_BIKESHED
 	curl https://api.csswg.org/bikeshed/ -F file=@index.bs -F output=err
-	curl https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > index.html | tee
+	curl https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > out/index.html | tee
 else
-	bikeshed spec index.bs index.html
+	bikeshed spec index.bs out/index.html
 endif
