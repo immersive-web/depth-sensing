@@ -23,6 +23,14 @@ spec:webxr device api - level 1; type:dfn; for:/; text:xr device
 </pre>
 
 <pre class="anchors">
+spec: WebGL; urlPrefix: https://www.khronos.org/registry/webgl/specs/latest/1.0/#
+    type: interface; text: GLenum; url: 5.1
+    type: interface; text: WebGLTexture; url: 5.9
+    for: GLenum;
+        type: dfn; text: LUMINANCE_ALPHA; url: 5.14
+spec: WebGL 2.0; urlPrefix: https://www.khronos.org/registry/webgl/specs/latest/2.0/#
+    for: GLenum;
+        type: dfn; text: R32F; url: 3.7
 spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
     type: dfn; text: capable of supporting; url: capable-of-supporting
     type: dfn; text: feature descriptor; url: feature-descriptor
@@ -30,6 +38,8 @@ spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
     type: dfn; text: inline XR device; url: inline-xr-device
     type: interface; text: XRFrame; url: xrframe-interface
     for: XRFrame;
+        type: dfn; text: active; url: xrframe-active
+        type: dfn; text: animationFrame; url: xrframe-animationframe
         type: dfn; text: time; url: xrframe-time
     type: interface; text: XRSession; url: xrsession-interface
     for: XRSession;
@@ -119,6 +129,111 @@ A device is [=capable of supporting=] the depth sensing feature if the device ex
 
 The depth sensing feature is subject to [=feature policy=] and requires <code>"xr-spatial-tracking"</code> policy to be allowed on the requesting document's origin.
 
+Intended data usage and data formats {#usage-and-formats}
+------------------------------------
+
+<script type="idl">
+
+enum XRDepthUsage {
+  "cpu-optimized",
+  "gpu-optimized",
+};
+
+</script>
+
+- An usage of <dfn enum-value for="XRDepthUsage">cpu-optimized</dfn> indicates that the depth data is intended to be used on the CPU, by interacting with {{XRCPUDepthInformation}} interface.
+- An usage of <dfn enum-value for="XRDepthUsage">gpu-optimized</dfn> indicates that the depth data is intended to be used on the GPU, by interacting with {{XRWebGLDepthInformation}} interface.
+
+<script type="idl">
+
+enum XRDepthDataFormat {
+  "luminance-alpha",
+  "float32"
+};
+
+</script>
+
+- A data format of <dfn enum-value for="XRDepthDataFormat">luminance-alpha</dfn> indicates that items in the depth data buffers obtained from the API are 2-byte unsigned integer values.
+- A data format <dfn enum-value for="XRDepthDataFormat">float32</dfn> indicates that items in the depth data buffers obtained from the API are 4-byte floating point values.
+
+The following table summarizes the ways various data formats can be consumed:
+
+<table class="tg">
+  <thead>
+    <tr>
+      <th>Data format</th>
+      <th>{{GLenum}} value equivalent</th>
+      <th>Usage on CPU</th>
+      <th>Usage on GPU</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{XRDepthDataFormat/"luminance-alpha"}}</td>
+      <td>[=GLenum/LUMINANCE_ALPHA=]</td>
+      <td>Interpret {{XRCPUDepthInformation/data}} as {{Uint16Array}}</td>
+      <td>Inspect Luminance and Alpha channels to reassemble single value.</td>
+    </tr>
+    <tr>
+      <td>{{XRDepthDataFormat/"float32"}}</td>
+      <td>[=GLenum/R32F=]</td>
+      <td>Interpret {{XRCPUDepthInformation/data}} as {{Float32Array}}</td>
+      <td>Inspect Red channel and use the value.</td>
+    </tr>
+  </tbody>
+</table>
+
+Session configuration {#session-configuration}
+---------------------
+
+<script type="idl">
+
+dictionary XRDepthStateInit {
+  required sequence<XRDepthUsage> usagePreference;
+  required sequence<XRDepthDataFormat> dataFormatPreference;
+};
+
+</script>
+
+The {{XRDepthStateInit/usagePreference}} is an ordered sequence of {{XRDepthUsage}}s, used to describe the desired depth sensing usage for the session.
+
+The {{XRDepthStateInit/dataFormatPreference}} is an ordered sequence of {{XRDepthDataFormat}}s, used to describe the desired depth sensing data format for the session.
+
+The {{XRSessionInit}} dictionary is expanded by adding new {{XRSessionInit/depthSensing}} key. The key is optional in {{XRSessionInit}}, but it MUST be provided when [=depth-sensing=] is included in either {{XRSessionInit/requiredFeatures}} or {{XRSessionInit/optionalFeatures}}.
+
+<script type="idl">
+
+partial dictionary XRSessionInit {
+  XRDepthStateInit? depthSensing;
+};
+
+</script>
+
+If the depth sensing feature is a required feature but the application did not supply a {{XRSessionInit/depthSensing}} key, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing.
+
+if the depth sensing feature is a required feature but the result of <a lt="find supported configuration configuration">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit/usagePreference}} and {{XRDepthStateInit/dataFormatPreference}} is <code>null</code>, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing.
+
+<div class="algorithm" data-algorithm="find-supported-configuration">
+In order to <dfn>find supported configuration configuration</dfn> for depth sensing API given |usagePreference| and |dataFormatPreference| sequences, the user agent MUST run the following algorithm:
+
+  1. Let |selectedUsage| be <code>null</code>.
+  1. For each |usage| in |usagePreference| sequence, perform the following steps:
+    1. If |usage| is not supported by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+    1. Set |selectedUsage| to |usage| and abort these nested steps.
+  1. If |selectedUsage| is <code>null</code>, return <code>null</code> and abort these steps.
+  1. Let |selectedDataFormat| be <code>null</code>.
+  1. For each |dataFormat| in |dataFormatPreference|, perform the following steps:
+    1. If |selectedUsage|,|dataFormat| combination is not supported by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+    1. Set |selectedDataFormat| to |dataFormat| and abort these nested steps.
+  1. If |selectedDataFormat| is <code>null</code>, return <code>null</code> and abort these steps.
+  1. Return |selectedUsage|,|selectedDataFormat|.
+
+</div>
+
+Note: user agents are not required to support all existing combinations of usages and data formats. This is intended to allow them to provide data in an efficient way, and depends on the underlying platforms. This decision places additional burden on the application developers - it could be mitigated by creation of libraries hiding the API complexity, possibly sacrificing performance.
+
+The user agent that is capable of supporting the depth sensing API MUST support at least one {{XRDepthUsage}} mode. The user agent that is capable of supporting the depth sensing API MUST support {{XRDepthDataFormat/"luminance-alpha"}} data format, and MAY support other formats.
+
 Obtaining depth data {#obtaining-data}
 ====================
 
@@ -129,45 +244,65 @@ XRDepthInformation {#xr-depth-info-section}
 
 [SecureContext, Exposed=Window]
 interface XRDepthInformation {
-  [SameObject] readonly attribute Uint16Array data;
-
   readonly attribute unsigned long width;
   readonly attribute unsigned long height;
 
   [SameObject] readonly attribute XRRigidTransform normTextureFromNormView;
-
-  float getDepth(unsigned long column, unsigned long row);
+  readonly attribute float rawValueToMeters;
 };
 
 </script>
 
-The {{XRDepthInformation/data}} attribute contains depth buffer information in raw format, suitable for uploading to a WebGL texture. The data is stored in column-major format, with each 2-byte entry containing unsigned integer corresponding to distance from the [=XRDepthInformation/view=]'s near plane, in millimeters.
+The {{XRDepthInformation/width}} attribute contains width of the [=XRDepthInformation/depth buffer=] (i.e. number of columns).
 
-Issue(immersive-web/depth-sensing#6): Accessing raw data could potentially need to have a way of knowing what is the underlying data type and how to convert from the numeric value to a value expressed in meters. This is to ensure that we do not force the implementers to convert the data they are able to obtain from the underlying XR devices.
+The {{XRDepthInformation/height}} attribute contains height of the [=XRDepthInformation/depth buffer=] (i.e. number of rows).
 
-Note: Applications SHOULD NOT attempt to change the contents of {{XRDepthInformation/data}} array as this can lead to incorrect results returned by the {{XRDepthInformation/getDepth(column, row)}} method.
+The {{XRDepthInformation/normTextureFromNormView}} attribute contains a {{XRRigidTransform}} that needs to be used when indexing into the [=XRDepthInformation/depth buffer=]. The transformation that the matrix represents changes the coordinate system from normalized view coordinates to normalized texture coordinates.
 
-The {{XRDepthInformation/width}} attribute contains width of the {{XRDepthInformation/data}} buffer (i.e. number of columns).
-
-The {{XRDepthInformation/height}} attribute contains height of the {{XRDepthInformation/data}} buffer (i.e. number of rows).
-
-The {{XRDepthInformation/normTextureFromNormView}} attribute contains a {{XRRigidTransform}} that needs to be used when indexing into {{XRDepthInformation/data}}. The transformation that the matrix represents changes the coordinate system from normalized view coordinates to normalized texture coordinates.
-
-The {{XRDepthInformation/getDepth(column, row)}} method can be used to [=obtain depth at coordinates=].
+The {{XRDepthInformation/rawValueToMeters}} attribute contains conversion factor from raw values that could be obtained directly from the [=XRDepthInformation/depth buffer=] into meters.
 
 Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> that stores {{XRView}} from which the depth information instance was created.
 
+Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>depth buffer</dfn> that contains depth buffer data. Different {{XRDepthInformation}}s may store objects of different concrete types in the depth buffer.
+
+<script type="idl">
+
+interface XRCPUDepthInformation : XRDepthInformation {
+  [SameObject] readonly attribute ArrayBuffer data;
+
+  float getDepthInMeters(unsigned long column, unsigned long row);
+};
+
+</script>
+
+The {{XRCPUDepthInformation/data}} attribute contains depth buffer information in raw format, suitable for uploading to a WebGL texture. The data is stored in column-major format, with each 2-byte entry containing unsigned integer corresponding to distance from the [=XRDepthInformation/view=]'s near plane, in millimeters.
+
+Issue(immersive-web/depth-sensing#6): Accessing raw data could potentially need to have a way of knowing what is the underlying data type and how to convert from the numeric value to a value expressed in meters. This is to ensure that we do not force the implementers to convert the data they are able to obtain from the underlying XR devices.
+
+Note: Applications SHOULD NOT attempt to change the contents of {{XRCPUDepthInformation/data}} array as this can lead to incorrect results returned by the {{XRCPUDepthInformation/getDepthInMeters(column, row)}} method.
+
+The {{XRCPUDepthInformation/getDepthInMeters(column, row)}} method can be used to [=obtain depth at coordinates=].
+
+<script type="idl">
+
+interface XRWebGLDepthInformation : XRDepthInformation {
+  [SameObject] readonly attribute WebGLTexture texture;
+};
+
+</script>
+
 <div class="algorithm" data-algorithm="create-depth-information">
 
-In order to <dfn>create a depth information instance</dfn> given {{XRFrame}} |frame| and {{XRView}} |view|, the user agent MUST run the following steps:
-    1. Let |result| be a new instance of {{XRDepthInformation}}.
+In order to <dfn>create a CPU depth information instance</dfn> given {{XRFrame}} |frame| and {{XRView}} |view|, the user agent MUST run the following steps:
+    1. Let |result| be a new instance of {{XRCPUDepthInformation}}.
     1. Let |time| be |frame|'s [=XRFrame/time=].
+    1. Let |session| be |frame|'s {{XRFrame/session}}.
     1. Let |device| be the |session|'s [=XRSession/XR device=].
     1. Let |nativeDepthInformation| be a result of querying |device| for the depth information valid as of |time|, for specified |view|.
     1. Initialize |result|'s {{XRDepthInformation/width}} to the width of the depth buffer returned in |nativeDepthInformation|.
     1. Initialize |result|'s {{XRDepthInformation/height}} to the height of the depth buffer returned in |nativeDepthInformation|.
     1. Initialize |result|'s {{XRDepthInformation/normTextureFromNormView}} to a new {{XRRigidTransform}} that performs a coordinate system change from normalized view coordinates to normalized texture coordinates. This transform should <code>z</code> coordinate of the transformed 3D vector unaffected.
-    1. Initialize |result|'s {{XRDepthInformation/data}} to the raw depth buffer returned in |nativeDepthInformation|.
+    1. Initialize |result|'s {{XRCPUDepthInformation/data}} to the raw depth buffer returned in |nativeDepthInformation|.
     1. Initialize |result|'s [=XRDepthInformation/view=] to |view|.
     1. Return |result|.
 
@@ -175,12 +310,13 @@ In order to <dfn>create a depth information instance</dfn> given {{XRFrame}} |fr
 
 <div class="algorithm" data-algorithm="obtain-depth-at-coordinates">
 
-When {{XRDepthInformation/getDepth(column, row)}} method is invoked on an {{XRDepthInformation}} |depthInformation| with |column|, |row|, the user agent MUST <dfn>obtain depth at coordinates</dfn> by running the following steps:
+When {{XRCPUDepthInformation/getDepthInMeters(column, row)}} method is invoked on an {{XRCPUDepthInformation}} |depthInformation| with |column|, |row|, the user agent MUST <dfn>obtain depth at coordinates</dfn> by running the following steps:
     1. If |column| is greater than or equal to |depthInformation|'s {{XRDepthInformation/width}}, [=exception/throw=] {{NotAllowedError}} and abort these steps.
     1. If |row| is greater than or equal to |depthInformation|'s {{XRDepthInformation/height}}, [=exception/throw=] {{NotAllowedError}} and abort these steps.
     1. Let |index| be equal to |row| multiplied by {{XRDepthInformation/width}} & added to |column|.
-    1. Let |depthInMillimeters| be equal to a value found at index |index| in {{XRDepthInformation/data}}.
-    1. Return |depthInMillimeters| divided by <code>1000.0</code>.
+    1. Let |rawDepth| be equal to a value found at index |index| in {{XRCPUDepthInformation/data}}.
+    1. Let |rawValueToMeters| be equal to |depthInformation|'s {{XRDepthInformation/rawValueToMeters}}.
+    1. Return |rawDepth| multiplied by |rawValueToMeters|.
 
 </div>
 
@@ -192,20 +328,23 @@ partial interface XRFrame {
 
 </script>
 
-The <dfn method for="XRFrame">getDepthInformation(view)</dfn> method, when invoked on an {{XRFrame}}, signals that the application wants to [=obtain depth information=] relevant for the frame.
+The <dfn method for="XRFrame">getDepthInformation(view)</dfn> method, when invoked on an {{XRFrame}}, signals that the application wants to [=obtain CPU depth information=] relevant for the frame.
 
 <div class="algorithm" data-algorithm="obtain-depth-information">
 
-When {{XRFrame/getDepthInformation(view)}} method is invoked on an {{XRFrame}} |frame| with an {{XRView}} |view|, the user agent MUST <dfn>obtain depth information</dfn> by running the following steps:
+When {{XRFrame/getDepthInformation(view)}} method is invoked on an {{XRFrame}} |frame| with an {{XRView}} |view|, the user agent MUST <dfn>obtain CPU depth information</dfn> by running the following steps:
 
   1. Let |session| be |frame|'s {{XRFrame/session}}.
   1. If [=depth-sensing=] feature descriptor is not [=list/contain|contained=] in the |session|'s [=XRSession/XR device=]'s [=XR device/list of enabled features=] for |session|'s [=XRSession/mode=], [=exception/throw=] a {{NotSupportedError}} and abort these steps.
   1. If |frame|'s [=XRFrame/active=] boolean is <code>false</code>, throw an {{InvalidStateError}} and abort these steps.
+  1. If |frame|'s [=XRFrame/animationFrame=] boolean is <code>false</code>, throw an {{InvalidStateError}} and abort these steps.
   1. If |frame|'s [=XRFrame/time=] does not match |view|'s [=XRView/frame time=], [=exception/throw=] an {{InvalidStateError}} and abort these steps.
-  1. Let |depthInformation| be a result of [=create a depth information instance|creating a depth information instance=] given |frame| and |view|.
+  1. Let |depthInformation| be a result of [=create a CPU depth information instance|creating a CPU depth information instance=] given |frame| and |view|.
   1. Return |depthInformation|.
 
 </div>
+
+Issue: we use [=XRFrame/time=] when checking if {{XRView}} originates from the frame in the algorithm above since XRView does not have an associated frame - change it in the main spec?
 
 Interpreting the results {#results-interpretation}
 ========================
@@ -218,6 +357,8 @@ Native device concepts {#native-device-concepts}
 <section class="non-normative">
 
 Issue: Fill this out.
+
+TODO: ... does not contain a combination that is supported by the [=native depth sensing=] capabilities on the device ...
 
 </section>
 
