@@ -375,7 +375,7 @@ In order to <dfn>create a CPU depth information instance</dfn> given {{XRFrame}}
 </div>
 
 <div class="example">
-The following code demonstrates how depth data can be obtained within {{XRFrameRequestCallback}}. It is assumed that the session that has depth sensing enabled, with usage set to "cpu-optimized" and data format set to "luminance-alpha", and that :
+The following code demonstrates how depth data can be obtained within {{XRFrameRequestCallback}}. It is assumed that the session that has depth sensing enabled, with usage set to "cpu-optimized" and data format set to "luminance-alpha":
 
 <pre highlight="js">
 
@@ -473,6 +473,93 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
     1. Initialize |result|'s [=XRDepthInformation/view=] to |view|.
     1. Return |result|.
 
+</div>
+
+<div class="example">
+The following code demonstrates how depth data can be obtained within {{XRFrameRequestCallback}}. It is assumed that the session that has depth sensing enabled, with usage set to "gpu-optimized" and data format set to "luminance-alpha":
+
+<pre highlight="js">
+
+const session = ...;          // Session created with depth sensing enabled.
+const referenceSpace = ...;   // Reference space created from the session.
+const glBinding = ...;        // XRWebGLBinding created from the session.
+
+function requestAnimationFrameCallback(t, frame) {
+  session.requestAnimationFrame(requestAnimationFrameCallback);
+
+  const pose = frame.getViewerPose(referenceSpace);
+  if(pose) {
+    for(const view of pose.views) {
+      const depthInformation = glBinding.getDepthInformation(view);
+      if(depthInformation) {
+        useGpuDepthInformation(view, depthInformation);
+      }
+    }
+  }
+}
+</pre>
+
+Once the {{XRWebGLDepthInformation}} is obtained, it can be used to discover a distance from the view plane to user's environment (see [[#results-interpretation]] section for details). The below code demonstrates how the data can transferred to the shader:
+
+<pre highlight="js">
+
+const gl = ...;             // GL context to use.
+const shaderProgram = ...;  // Linked WebGLProgram.
+const programInfo = {
+  uniformLocations: {
+    depthTexture: gl.getUniformLocation(shaderProgram, 'uDepthTexture'),
+    uvTransform: gl.getUniformLocation(shaderProgram, 'uUvTransform'),
+    rawValueToMeters: gl.getUniformLocation(shaderProgram, 'uRawValueToMeters'),
+  }
+};
+
+function useGpuDepthInformation(view, depthInformation) {
+  // ...
+
+  gl.bindTexture(gl.TEXTURE_2D, depthInformation.texture);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.uniform1i(programInfo.uniformLocations.depthTexture, 0);
+
+  gl.uniformMatrix4fv(
+    programInfo.uniformLocations.uvTransform, false,
+    depthData.normTextureFromNormView.matrix);
+
+  gl.uniform1f(
+    programInfo.uniformLocations.rawValueToMeters,
+    depthData.rawValueToMeters);
+
+  // ...
+}
+
+</pre>
+
+The fragment shader that makes use of the depth buffer can be for example:
+
+<pre highlight="glsl">
+precision mediump float;
+
+uniform sampler2D uDepthTexture;
+uniform mat4 uUvTransform;
+uniform float uRawValueToMeters;
+
+varying vec2 vTexCoord;
+
+float DepthGetMeters(in sampler2D depth_texture, in vec2 depth_uv) {
+  // Depth is packed into the luminance and alpha components of its texture.
+  // The texture is a normalized format, storing millimeters.
+  vec2 packedDepth = texture2D(depth_texture, depth_uv).ra;
+  return dot(packedDepth, vec2(255.0, 256.0 * 255.0)) * uRawValueToMeters;
+}
+
+void main(void) {
+  vec2 texCoord = (uUvTransform * vec4(vTexCoord.xy, 0, 1)).xy;
+
+  float depthInMeters = DepthGetMeters(uDepthTexture, texCoord);
+
+  gl_FragColor = ...;
+}
+
+</pre>
 </div>
 
 Interpreting the results {#results-interpretation}
