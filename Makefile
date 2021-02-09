@@ -2,7 +2,7 @@ LOCAL_BIKESHED := $(shell command -v bikeshed 2> /dev/null)
 
 .PHONY: all index.html
 
-all: index.html directories images
+all: directories index.html images
 
 directories:
 	mkdir -p out/img
