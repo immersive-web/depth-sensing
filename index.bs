@@ -336,8 +336,8 @@ When {{XRCPUDepthInformation/getDepthInMeters(x, y)}} method is invoked on an {{
     1. Let |normalizedViewCoordinates| be a vector representing 3-dimensional point in space, with <code>x</code> coordinate set to |x|, <code>y</code> coordinate set to |y|, <code>z</code> coordinate set to <code>0.0</code>, and <code>w</code> coordinate set to <code>1.0</code>.
     1. Let |normalizedDepthCoordinates| be a result of premultiplying |normalizedViewCoordinates| vector from the left by |depthInformation|'s {{XRDepthInformation/normDepthBufferFromNormView}}.
     1. Let |depthCoordinates| be a result of scaling |normalizedDepthCoordinates|, with <code>x</code> coordinate multiplied by |depthInformation|'s {{XRDepthInformation/width}} and <code>y</code> coordinate multiplied by |depthInformation|'s {{XRDepthInformation/height}}.
-    1. Let |column| be the value of |depthCoordinates|' <code>x</code> coordinate, rounded to the nearest integer and clamped to <code>[0, width)</code> range.
-    1. Let |row| be the value of |depthCoordinates|' <code>y</code> coordinate, rounded to the nearest integer and clamped to <code>[0, height)</code> range.
+    1. Let |column| be the value of |depthCoordinates|' <code>x</code> coordinate, truncated to an integer, and clamped to <code>[0, width-1]</code> integer range.
+    1. Let |row| be the value of |depthCoordinates|' <code>y</code> coordinate, truncated to an integer, and clamped to <code>[0, height-1]</code> integer range.
     1. Let |index| be equal to |row| multiplied by {{XRDepthInformation/width}} & added to |column|.
     1. Let |byteIndex| be equal to |index| multiplied by the size of the depth data format.
     1. Let |rawDepth| be equal to a value found at index |byteIndex| in {{XRCPUDepthInformation/data}}, interpreted as a number accordingly to |session|'s {{XRSession/depthDataFormat}}.
@@ -454,7 +454,6 @@ When {{XRWebGLBinding/getDepthInformation(view)}} method is invoked on an {{XRFr
   1. If the |session|'s {{XRSession/depthUsage}} is not {{XRDepthUsage/"gpu-optimized"}}, throw an {{InvalidStateError}} and abort these steps.
   1. If |frame|'s [=XRFrame/active=] boolean is <code>false</code>, throw an {{InvalidStateError}} and abort these steps.
   1. If |frame|'s [=XRFrame/animationFrame=] boolean is <code>false</code>, throw an {{InvalidStateError}} and abort these steps.
-  1. If |frame| does not match |view|'s [=XRView/frame=], [=exception/throw=] an {{InvalidStateError}} and abort these steps.
   1. Let |depthInformation| be a result of [=create a WebGL depth information instance|creating a WebGL depth information instance=] given |frame| and |view|.
   1. Return |depthInformation|.
 
