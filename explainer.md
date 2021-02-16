@@ -9,7 +9,8 @@ One example of a tech demonstration of the Depth API running on a smartphone (An
 Given technical limitations of currently available native APIs, the main foreseen use case of the WebXR’s Depth API would be providing more believable interactions with the user's environment by feeding the depth map into the physics engine used. More advanced engines could leverage obtained depth data, along with the user’s pose, and attempt to reconstruct a more detailed map of the user’s environment.
 
 Some specific examples and experiences that could be provided using the depth data for physics are:
-- using the depth data for collision detection - projectiles burst when they hit a real world object, balls bounce off the furniture, virtual car hits a wall, etc
+- using the depth data for collision detection - projectiles burst when they hit a real world object, balls bounce off the furniture, virtual car hits a wall, sound propagates differently based on the proximity to the environment, etc
+  - as a more advanced use case, the depth data, along with the device pose, could also be used to attempt to reconstruct users' environment
 - using the depth data for path finding - robot navigates across a cluttered room
 
 Secondary use case of the Depth API would be to provide applications with data that could be used for occlusion when rendering virtual objects. This use case is more sensitive to the quality of data, as any inaccuracies will likely be noticeable to the users. Depending on the provided depth buffer’s resolution and accuracy of data returned from the devices, the applications may choose not to leverage Depth API for this purpose. Therefore, the Depth API is not designed primarily with this use case in mind, but should be sufficiently flexible to be extended in the future.
@@ -50,30 +51,8 @@ if(depthInfo == null) {
   ... // Handle the case where current frame does not carry depth information.
 }
 
-// Obtain the depth at (x, y) depth buffer coordinate:
+// Obtain the depth at (x, y) normalized view coordinates:
 const depthInMeters = depthInfo.getDepthInMeters(x, y);
-```
-
-**Note**: The depth buffer coordinates may not correspond to screen space
-coordinates. To convert from depth buffer coordinates, the applications
-can use `depthData.normTextureFromNormView` matrix. Pseudocode:
-
-```js
-
-const viewport = ...; // XRViewport obtained from XRWebGLLayer
-const normViewFromNormTexture = depthInfo.normTextureFromNormView.inverse.matrix;
-
-// Normalize depth buffer coordinates (x, y) to range [0...1]:
-const depth_coordinates_texture_normalized = [x / depthInfo.width, y / depthInfo.height];
-// Transform to normalized view coordinates (with the origin in lower left corner of the screen),
-// using your favorite matrix multiplication library:
-const depth_coordinates_view_normalized = normViewFromNormTexture * depth_coordinates_normalized;
-// Denormalize from [0..1] using viewport dimensions:
-const depth_coordinates_view = [depth_coordinates_view_normalized[0] * viewport.width,
-                                depth_coordinates_view_normalized[1] * viewport.height];
-
-// (x,y) depth buffer coordinates correspond to (depth_coordinates_view[0], depth_coordinates_view[1])
-// coordinates
 ```
 
 Alternatively, the depth data is also available via the `depthInfo.data` attribute. The entries are stored in a row-major order, without padding, and the entry size & data format is determined by the depth format that can be queried from the XRSession. The raw values obtained from the buffer can be converted to meters by multiplying the value by `depthInfo.rawValueToMeters`.
@@ -98,7 +77,24 @@ const index = c + r * depthInfo.width;
 const depthInMetres = float32Data[index] * depthInfo.rawValueToMeters;
 ```
 
-Both of the above examples are equivalent to calling `depthInfo.getDepthInMeters(c, r)`.
+The above examples obtain depth in meters values at (c, r) depth buffer coordinates - in order to convert them to normalized view coordinates (to match the behavior `getDepthInMeters(x, y)` method), the application can perform the following steps:
+
+```js
+// Normalize depth buffer coordinates (c, r) to range [0...1]:
+const normDepthBufferCoordinates = [c / depthInfo.width,
+                                    r / depthInfo.height,
+                                    0.0,
+                                    1.0];
+const normViewFromNormDepthBuffer = depthInfo.normDepthBufferFromNormView.inverse.matrix;
+
+// Transform to normalized view coordinates (with the origin in upper left corner of the screen),
+// using your favorite matrix multiplication library:
+const normalizedViewCoordinates = normViewFromNormDepthBuffer * normDepthBufferCoordinates;
+
+// The above can also be denormalized to obtain absolute coordinates using viewport dimensions:
+const viewCoordinates = [normalizedViewCoordinates[0] * viewport.width,
+                         normalizedViewCoordinates[1] * viewport.height];
+```
 
 **Note**: `XRFRame`'s `getDepthInformation()` method will only return a result if the depth API was configured with mode set to `"cpu-optimized"`. 
 
@@ -111,7 +107,7 @@ const xrWebGLBinding = ...; // XRWebGLBinding created for the current session an
 const depthInfo = xrWebGLBinding.getDepthInformation(view);
 
 // Grab the information from the XRDepthInformation interface:
-const uvTransform = depthInfo.normTextureFromNormView.matrix;
+const uvTransform = depthInfo.normDepthBufferFromNormView.matrix;
 
 const program = ...; // Linked WebGLProgam program.
 const u_DepthTextureLocation = gl.getUniformLocation(program, "u_DepthTexture");
