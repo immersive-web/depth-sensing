@@ -34,7 +34,7 @@ Note that the usage and format preferences should omit values that the site know
 
 ```javascript
 console.log(session.depthUsage);
-console.log(session.depthFormat);
+console.log(session.depthDataFormat);
 
 // Other setup, for example prepare appropriate shader depending on
 // the depth data format if using WebGL to access the data.
