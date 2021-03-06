@@ -232,7 +232,7 @@ interface XRDepthInformation {
   readonly attribute unsigned long width;
   readonly attribute unsigned long height;
 
-  [SameObject] readonly attribute XRRigidTransform normTextureFromNormView;
+  [SameObject] readonly attribute XRRigidTransform normDepthBufferFromNormView;
   readonly attribute float rawValueToMeters;
 };
 
