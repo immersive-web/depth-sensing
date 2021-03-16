@@ -12,7 +12,7 @@ This is the repository for depth-sensing.
 ## Specifications
 
 * [Explainer](explainer.md)
-
+* [Specification](https://immersive-web.github.io/depth-sensing/)
 
 ### Related specifications
 * [WebXR Device API - Level 1][webxrspec]: Main specification for JavaScript API for accessing VR and AR devices, including sensors and head-mounted displays.
