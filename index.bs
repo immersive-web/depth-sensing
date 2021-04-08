@@ -314,6 +314,7 @@ XRCPUDepthInformation {#xr-cpu-depth-info-section}
 ---------------------
 
 <script type="idl">
+[Exposed=Window]
 interface XRCPUDepthInformation : XRDepthInformation {
   [SameObject] readonly attribute ArrayBuffer data;
 
@@ -429,6 +430,7 @@ XRWebGLDepthInformation {#xr-gpu-depth-info-section}
 -----------------------
 
 <script type="idl">
+[Exposed=Window]
 interface XRWebGLDepthInformation : XRDepthInformation {
   [SameObject] readonly attribute WebGLTexture texture;
 };
