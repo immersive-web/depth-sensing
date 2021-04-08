@@ -59,9 +59,7 @@ Alternatively, the depth data is also available via the `depthInfo.data` attribu
 
 For example, to access the data at row `r`, column `c` of the buffer that has `"luminance-alpha"` format, the app can use:
 ```js
-const uint16Data = new Uint16Array(depthInfo.data.buffer,
-                                   depthInfo.data.byteOffset,
-                                   depthInfo.data.byteLength);
+const uint16Data = new Uint16Array(depthInfo.data);
 
 const index = c + r * depthInfo.width;
 const depthInMetres = uint16Data[index] * depthInfo.rawValueToMeters;
@@ -69,9 +67,7 @@ const depthInMetres = uint16Data[index] * depthInfo.rawValueToMeters;
 
 If the data format was set to `"float32"`, the data could be accessed similarly (note that the only difference is that the data buffer is interpreted as containing float32s):
 ```js
-const float32Data = new Float32Array(depthInfo.data.buffer,
-                                     depthInfo.data.byteOffset,
-                                     depthInfo.data.byteLength);
+const float32Data = new Float32Array(depthInfo.data);
 
 const index = c + r * depthInfo.width;
 const depthInMetres = float32Data[index] * depthInfo.rawValueToMeters;
