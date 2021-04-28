@@ -23,7 +23,7 @@ const session = await navigator.xr.requestSession(“immersive-ar”, {
   requiredFeatures: [“depth-sensing”],
   depthSensing: {
     usagePreference: ["cpu-optimized", "gpu-optimized"],
-    formatPreference: ["luminance-alpha", "float32"]
+    dataFormatPreference: ["luminance-alpha", "float32"]
   }
 });
 ```
@@ -34,7 +34,7 @@ Note that the usage and format preferences should omit values that the site know
 
 ```javascript
 console.log(session.depthUsage);
-console.log(session.depthFormat);
+console.log(session.depthDataFormat);
 
 // Other setup, for example prepare appropriate shader depending on
 // the depth data format if using WebGL to access the data.
@@ -228,7 +228,7 @@ interface XRDepthInformation {
   readonly attribute unsigned long width;
   readonly attribute unsigned long height;
 
-  [SameObject] readonly attribute XRRigidTransform normTextureFromNormView;
+  [SameObject] readonly attribute XRRigidTransform normDepthBufferFromNormView;
   readonly attribute float rawValueToMeters;
 };
 
@@ -236,7 +236,7 @@ interface XRCPUDepthInformation : XRDepthInformation {
   // Data format is determined by session's depthDataFormat attribute.
   [SameObject] readonly attribute ArrayBuffer data;
 
-  float getDepthInMeters(unsigned long column, unsigned long row);
+  float getDepthInMeters(float x, float y);
 };
 
 interface XRWebGLDepthInformation : XRDepthInformation {
