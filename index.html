@@ -3,10 +3,8 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>WebXR Depth Sensing Module</title>
-  <meta content="CG-DRAFT" name="w3c-status">
-  <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version c5fd42b86, updated Mon Apr 5 16:27:33 2021 -0700" name="generator">
+  <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet" type="text/css">
+  <meta content="Bikeshed version 4f053d00e, updated Tue Aug 10 14:13:32 2021 -0700" name="generator">
   <link href="https://immersive-web.github.io/depth-sensing/" rel="canonical">
 <style>
   .non-normative::before {
@@ -166,9 +164,9 @@ pre .property::before, pre .property::after {
     --ins-bg: transparent;
 
     --a-normal-text: #034575;
-    --a-normal-underline: #707070;
+    --a-normal-underline: #bbb;
     --a-visited-text: var(--a-normal-text);
-    --a-visited-underline: #bbb;
+    --a-visited-underline: #707070;
     --a-hover-bg: rgba(75%, 75%, 75%, .25);
     --a-active-text: #c00;
     --a-active-underline: #c00;
@@ -311,6 +309,62 @@ figcaption:not(.no-marker)::before {
 [data-md] > :last-child {
     margin-bottom: 0;
 }</style>
+<style>/* style-mdn-anno */
+
+            @media (max-width: 767px) { .mdn-anno { opacity: .1 } }
+            .mdn-anno { font: 1em sans-serif; padding: 0.3em; position: absolute; z-index: 8; right: 0.3em; background: #EEE; color: black; box-shadow: 0 0 3px #999; overflow: hidden; border-collapse: initial; border-spacing: initial; min-width: 9em; max-width: min-content; white-space: nowrap; word-wrap: normal; hyphens: none}
+            .mdn-anno:not(.wrapped) { opacity: 1}
+            .mdn-anno:hover { z-index: 9 }
+            .mdn-anno.wrapped { min-width: 0 }
+            .mdn-anno.wrapped > :not(button) { display: none; }
+            .mdn-anno > .mdn-anno-btn { cursor: pointer; border: none; color: #000; background: transparent; margin: -8px; float: right; padding: 10px 8px 8px 8px; outline: none; }
+            .mdn-anno > .mdn-anno-btn > .less-than-two-engines-flag { color: red; padding-right: 2px; }
+            .mdn-anno > .mdn-anno-btn > .all-engines-flag { color: green; padding-right: 2px; }
+            .mdn-anno > .mdn-anno-btn > span { color: #fff; background-color: #000; font-weight: normal; font-family: zillaslab, Palatino, "Palatino Linotype", serif; padding: 2px 3px 0px 3px; line-height: 1.3em; vertical-align: top; }
+            .mdn-anno > .feature { margin-top: 20px; }
+            .mdn-anno > .feature:not(:first-of-type) { border-top: 1px solid #999; margin-top: 6px; padding-top: 2px; }
+            .mdn-anno > .feature > .less-than-two-engines-text { color: red }
+            .mdn-anno > .feature > .all-engines-text { color: green }
+            .mdn-anno > .feature > p { font-size: .75em; margin-top: 6px; margin-bottom: 0; }
+            .mdn-anno > .feature > p + p { margin-top: 3px; }
+            .mdn-anno > .feature > .support { display: block; font-size: 0.6em; margin: 0; padding: 0; margin-top: 2px }
+            .mdn-anno > .feature > .support + div { padding-top: 0.5em; }
+            .mdn-anno > .feature > .support > hr { display: block; border: none; border-top: 1px dotted #999; padding: 3px 0px 0px 0px; margin: 2px 3px 0px 3px; }
+            .mdn-anno > .feature > .support > hr::before { content: ""; }
+            .mdn-anno > .feature > .support > span { padding: 0.2em 0; display: block; display: table; }
+            .mdn-anno > .feature > .support > span.no { color: #CCCCCC; filter: grayscale(100%); }
+            .mdn-anno > .feature > .support > span.no::before { opacity: 0.5; }
+            .mdn-anno > .feature > .support > span:first-of-type { padding-top: 0.5em; }
+            .mdn-anno > .feature > .support > span > span { padding: 0 0.5em; display: table-cell; }
+            .mdn-anno > .feature > .support > span > span:first-child { width: 100%; }
+            .mdn-anno > .feature > .support > span > span:last-child { width: 100%; white-space: pre; padding: 0; }
+            .mdn-anno > .feature > .support > span::before { content: ' '; display: table-cell; min-width: 1.5em; height: 1.5em; background: no-repeat center center; background-size: contain; text-align: right; font-size: 0.75em; font-weight: bold; }
+            .mdn-anno > .feature > .support > .chrome_android::before { background-image: url(https://resources.whatwg.org/browser-logos/chrome.svg); }
+            .mdn-anno > .feature > .support > .firefox_android::before { background-image: url(https://resources.whatwg.org/browser-logos/firefox.png); }
+            .mdn-anno > .feature > .support > .chrome::before { background-image: url(https://resources.whatwg.org/browser-logos/chrome.svg); }
+            .mdn-anno > .feature > .support > .edge_blink::before { background-image: url(https://resources.whatwg.org/browser-logos/edge.svg); }
+            .mdn-anno > .feature > .support > .edge::before { background-image: url(https://resources.whatwg.org/browser-logos/edge_legacy.svg); }
+            .mdn-anno > .feature > .support > .firefox::before { background-image: url(https://resources.whatwg.org/browser-logos/firefox.png); }
+            .mdn-anno > .feature > .support > .ie::before { background-image: url(https://resources.whatwg.org/browser-logos/ie.png); }
+            .mdn-anno > .feature > .support > .safari_ios::before { background-image: url(https://resources.whatwg.org/browser-logos/safari-ios.svg); }
+            .mdn-anno > .feature > .support > .nodejs::before { background-image: url(https://nodejs.org/static/images/favicons/favicon.ico); }
+            .mdn-anno > .feature > .support > .opera_android::before { background-image: url(https://resources.whatwg.org/browser-logos/opera.svg); }
+            .mdn-anno > .feature > .support > .opera::before { background-image: url(https://resources.whatwg.org/browser-logos/opera.svg); }
+            .mdn-anno > .feature > .support > .safari::before { background-image: url(https://resources.whatwg.org/browser-logos/safari.png); }
+            .mdn-anno > .feature > .support > .samsunginternet_android::before { background-image: url(https://resources.whatwg.org/browser-logos/samsung.svg); }
+            .mdn-anno > .feature > .support > .webview_android::before { background-image: url(https://resources.whatwg.org/browser-logos/android-webview.png); }
+            .name-slug-mismatch { color: red }
+            .caniuse-status:hover { z-index: 9; }
+
+            /* dt, li, .issue, .note, and .example are "position: relative", so to put annotation at right margin, must move to right of containing block */
+            .h-entry:not(.status-LS) dt > .mdn-anno, .h-entry:not(.status-LS) li > .mdn-anno, .h-entry:not(.status-LS) .issue > .mdn-anno, .h-entry:not(.status-LS) .note > .mdn-anno, .h-entry:not(.status-LS) .example > .mdn-anno { right: -6.7em; }
+            .h-entry p + .mdn-anno { margin-top: 0; }
+            h2 + .mdn-anno.after { margin: -48px 0 0 0; }
+            h3 + .mdn-anno.after { margin: -46px 0 0 0; }
+            h4 + .mdn-anno.after { margin: -42px 0 0 0; }
+            h5 + .mdn-anno.after { margin: -40px 0 0 0; }
+            h6 + .mdn-anno.after { margin: -40px 0 0 0; }
+            </style>
 <style>/* style-selflinks */
 
 :root {
@@ -631,7 +685,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">WebXR Depth Sensing Module</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-04-08">8 April 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-08-24">24 August 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -647,15 +701,32 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2021 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2021 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
    <p>Depth Sensing API is a module extending the capabilities of WebXR Device API. It enables apps to obtain depth information computed by supported XR devices in order to provide more immersive experiences. The example use cases of depth sensing API include (but are not limited to) simulating physical interactions of virtual objects with the real world, occlusion, and non-visual applications that can make use of increased awareness of users' environment.</p>
   </div>
-  <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
+  <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
+   <p> <em>This section describes the status of this document at the time of its publication. Other
+    documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this
+    technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical
+    reports index</a> at http://www.w3.org/TR/.</em> </p>
+   <p> This document was published by the <a href="https://www.w3.org/immersive-web/">Immersive Web Working Group</a> as an Editors' Draft. This document is intended to become a W3C Recommendation.
+
+    Feedback and comments on this specification are welcome. Please use <a href="https://github.com/immersive-web/depth-sensing/issues">Github issues</a>.
+    Discussions may also be found in the <a href="http://lists.w3.org/Archives/Public/public-immersive-web/">public-immersive-web@w3.org archives</a>. </p>
+   <p> Publication as an Editors' Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may
+    be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite
+    this document as other than work in progress. </p>
+   <p> This document was produced by a group operating under the <a href="http://www.w3.org/Consortium/Patent-Policy-20170801/"> <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/groups/wg/immersive-web/ipr" rel="disclosure">public list of any
+    patent disclosures</a> made in connection with the deliverables of the group; that page also
+    includes instructions for disclosing a patent. An individual who has actual knowledge of a
+    patent which the individual believes contains <a href="http://www.w3.org/Consortium/Patent-Policy-20170801/#def-essential">Essential
+    Claim(s)</a> must disclose the information in accordance with <a href="http://www.w3.org/Consortium/Patent-Policy-20170801/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
+   <p> This document is governed by the <a href="https://www.w3.org/2020/Process-20200915/" id="w3c_process_revision">15 September 2020 W3C Process Document</a>. </p>
    <p></p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -689,12 +760,6 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      </ol>
     <li><a href="#privacy-security"><span class="secno">6</span> <span class="content">Privacy &amp; Security Considerations</span></a>
     <li><a href="#ack"><span class="secno">7</span> <span class="content">Acknowledgements</span></a>
-    <li>
-     <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
-     <ol class="toc">
-      <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
-      <li><a href="#w3c-conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
-     </ol>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
      <ol class="toc">
@@ -831,6 +896,35 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 <c- p>});</c->
 </pre>
    </div>
+   <div class="mdn-anno wrapped">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRSession/depthDataFormat" title="The read-only depthDataFormat property of an immersive-ar XRSession describes which depth sensing data format is used.">XRSession/depthDataFormat</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera no"><span>Opera</span><span>None</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRSession/depthUsage" title="The read-only depthUsage property of an immersive-ar XRSession describes which depth-sensing usage is used.">XRSession/depthUsage</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera no"><span>Opera</span><span>None</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+   </div>
 <pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://www.w3.org/TR/webxr/#xrsession-interface" id="ref-for-xrsession-interface②"><c- g>XRSession</c-></a> {
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-xrdepthusage" id="ref-for-enumdef-xrdepthusage③"><c- n>XRDepthUsage</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="XRSession" data-dfn-type="attribute" data-export data-readonly data-type="XRDepthUsage" id="dom-xrsession-depthusage"><code><c- g>depthUsage</c-></code></dfn>;
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-xrdepthdataformat" id="ref-for-enumdef-xrdepthdataformat②"><c- n>XRDepthDataFormat</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="XRSession" data-dfn-type="attribute" data-export data-readonly data-type="XRDepthDataFormat" id="dom-xrsession-depthdataformat"><code><c- g>depthDataFormat</c-></code></dfn>;
@@ -840,6 +934,74 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <p>The <code class="idl"><a data-link-type="idl" href="#dom-xrsession-depthdataformat" id="ref-for-dom-xrsession-depthdataformat①">depthDataFormat</a></code> describes depth sensing data format with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror①">InvalidStateError</a></code>.</p>
    <h2 class="heading settled" data-level="3" id="obtaining-data"><span class="secno">3. </span><span class="content">Obtaining depth data</span><a class="self-link" href="#obtaining-data"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="xr-depth-info-section"><span class="secno">3.1. </span><span class="content">XRDepthInformation</span><a class="self-link" href="#xr-depth-info-section"></a></h3>
+   <div class="mdn-anno wrapped">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRDepthInformation/height" title="The read-only height property of the XRDepthInformation interface contains the height of the depth buffer (number of rows).">XRDepthInformation/height</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRDepthInformation/normDepthBufferFromNormView" title="The read-only normDepthBufferFromNormView property of the XRDepthInformation interface contains the 3D geometric transform that needs to be applied when indexing into the depth buffer.">XRDepthInformation/normDepthBufferFromNormView</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRDepthInformation/rawValueToMeters" title="The read-only rawValueToMeters property of the XRDepthInformation interface contains the scale factor by which the raw depth values must be multiplied in order to get the depths in meters.">XRDepthInformation/rawValueToMeters</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRDepthInformation/width" title="The read-only width property of the XRDepthInformation interface contains the width of the depth buffer (number of columns).">XRDepthInformation/width</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRDepthInformation" title="The XRDepthInformation interface contains information about the distance from the user’s device to the real-world geometry in the user’s environment.">XRDepthInformation</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+   </div>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="xrdepthinformation"><code><c- g>XRDepthInformation</c-></code></dfn> {
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long" id="ref-for-idl-unsigned-long"><c- b>unsigned</c-> <c- b>long</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="XRDepthInformation" data-dfn-type="attribute" data-export data-readonly data-type="unsigned long" id="dom-xrdepthinformation-width"><code><c- g>width</c-></code></dfn>;
@@ -874,6 +1036,51 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.2" id="xr-cpu-depth-info-section"><span class="secno">3.2. </span><span class="content">XRCPUDepthInformation</span><a class="self-link" href="#xr-cpu-depth-info-section"></a></h3>
+   <div class="mdn-anno wrapped after">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRCPUDepthInformation" title="The XRCPUDepthInformation interface contains depth information from the CPU (returned by XRFrame.getDepthInformation()).">XRCPUDepthInformation</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+   </div>
+   <div class="mdn-anno wrapped">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRCPUDepthInformation/data" title="The read-only data property of the XRCPUDepthInformation interface is an ArrayBuffer containing depth-buffer information in raw format.">XRCPUDepthInformation/data</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRCPUDepthInformation/getDepthInMeters" title="The getDepthInMeters() method of the XRCPUDepthInformation interface returns the depth in meters at (x, y) in normalized view coordinates (origin in the top left corner).">XRCPUDepthInformation/getDepthInMeters</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+   </div>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="xrcpudepthinformation"><code><c- g>XRCPUDepthInformation</c-></code></dfn> : <a data-link-type="idl-name" href="#xrdepthinformation" id="ref-for-xrdepthinformation④"><c- n>XRDepthInformation</c-></a> {
   [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SameObject" id="ref-for-SameObject①"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-ArrayBuffer" id="ref-for-idl-ArrayBuffer"><c- b>ArrayBuffer</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="XRCPUDepthInformation" data-dfn-type="attribute" data-export data-readonly data-type="ArrayBuffer" id="dom-xrcpudepthinformation-data"><code><c- g>data</c-></code></dfn>;
@@ -919,6 +1126,22 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <a data-link-type="idl-name" href="#xrcpudepthinformation" id="ref-for-xrcpudepthinformation②"><c- n>XRCPUDepthInformation</c-></a>? <a class="idl-code" data-link-type="method" href="#dom-xrframe-getdepthinformation" id="ref-for-dom-xrframe-getdepthinformation"><c- g>getDepthInformation</c-></a>(<a data-link-type="idl-name" href="https://immersive-web.github.io/webxr/#xrview" id="ref-for-xrview①"><c- n>XRView</c-></a> <dfn class="idl-code" data-dfn-for="XRFrame/getDepthInformation(view)" data-dfn-type="argument" data-export id="dom-xrframe-getdepthinformation-view-view"><code><c- g>view</c-></code><a class="self-link" href="#dom-xrframe-getdepthinformation-view-view"></a></dfn>);
 };
 </pre>
+   <div class="mdn-anno wrapped">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRFrame/getDepthInformation" title="The getDepthInformation() method of the XRFrame interface returns an XRCPUDepthInformation object containing CPU depth information for the active and animated frame.">XRFrame/getDepthInformation</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera no"><span>Opera</span><span>None</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+   </div>
    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="XRFrame" data-dfn-type="method" data-export id="dom-xrframe-getdepthinformation"><code>getDepthInformation(view)</code></dfn> method, when invoked on an <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/webxr/#xrframe-interface" id="ref-for-xrframe-interface①">XRFrame</a></code>, signals that the application wants to <a data-link-type="dfn" href="#obtain-cpu-depth-information" id="ref-for-obtain-cpu-depth-information">obtain CPU depth information</a> relevant for the frame.</p>
    <div class="algorithm" data-algorithm="obtain-depth-information">
     <p>When <code class="idl"><a data-link-type="idl" href="#dom-xrframe-getdepthinformation" id="ref-for-dom-xrframe-getdepthinformation①">getDepthInformation(view)</a></code> method is invoked on an <code class="idl"><a data-link-type="idl" href="https://www.w3.org/TR/webxr/#xrframe-interface" id="ref-for-xrframe-interface②">XRFrame</a></code> <var>frame</var> with an <code class="idl"><a data-link-type="idl" href="https://immersive-web.github.io/webxr/#xrview" id="ref-for-xrview②">XRView</a></code> <var>view</var>, the user agent MUST <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="obtain-cpu-depth-information">obtain CPU depth information</dfn> by running the following steps:</p>
@@ -1002,12 +1225,57 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </pre>
    </div>
    <h3 class="heading settled" data-level="3.3" id="xr-gpu-depth-info-section"><span class="secno">3.3. </span><span class="content">XRWebGLDepthInformation</span><a class="self-link" href="#xr-gpu-depth-info-section"></a></h3>
+   <div class="mdn-anno wrapped">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRWebGLDepthInformation/texture" title="The read-only texture property of the XRWebGLDepthInformation interface is a WebGLTexture containing depth buffer information as an opaque texture.">XRWebGLDepthInformation/texture</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRWebGLDepthInformation" title="The XRWebGLDepthInformation interface contains depth information from the GPU/WebGL (returned by XRWebGLBinding.getDepthInformation()).">XRWebGLDepthInformation</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android no"><span>Opera Mobile</span><span>None</span></span>
+     </div>
+    </div>
+   </div>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="xrwebgldepthinformation"><code><c- g>XRWebGLDepthInformation</c-></code></dfn> : <a data-link-type="idl-name" href="#xrdepthinformation" id="ref-for-xrdepthinformation⑤"><c- n>XRDepthInformation</c-></a> {
   [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SameObject" id="ref-for-SameObject②"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.9" id="ref-for-5.9"><c- n>WebGLTexture</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="XRWebGLDepthInformation" data-dfn-type="attribute" data-export data-readonly data-type="WebGLTexture" id="dom-xrwebgldepthinformation-texture"><code><c- g>texture</c-></code></dfn>;
 };
 </pre>
    <p>The <code class="idl"><a data-link-type="idl" href="#dom-xrwebgldepthinformation-texture" id="ref-for-dom-xrwebgldepthinformation-texture①">texture</a></code> attribute contains depth buffer information as an <a data-link-type="dfn" href="https://immersive-web.github.io/layers/#opaque-texture" id="ref-for-opaque-texture">opaque texture</a>. Each texel corresponds to distance from the <a data-link-type="dfn" href="#xrdepthinformation-view" id="ref-for-xrdepthinformation-view④">view</a>'s near plane to the users' environment, in unspecified units. The size of each data entry and the type is determined by <code class="idl"><a data-link-type="idl" href="#dom-xrsession-depthdataformat" id="ref-for-dom-xrsession-depthdataformat⑤">depthDataFormat</a></code>. The values can be converted from unspecified units to meters by multiplying them by <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-rawvaluetometers" id="ref-for-dom-xrdepthinformation-rawvaluetometers③">rawValueToMeters</a></code>. The <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-normdepthbufferfromnormview" id="ref-for-dom-xrdepthinformation-normdepthbufferfromnormview④">normDepthBufferFromNormView</a></code> can be used to transform from <a data-link-type="dfn" href="#normalized-view-coordinates" id="ref-for-normalized-view-coordinates②">normalized view coordinates</a> into depth buffer’s coordinate system. When accessed, the algorithm to <a data-link-type="dfn" href="#attempting-to-access-the-depth-buffer" id="ref-for-attempting-to-access-the-depth-buffer②">access the depth buffer</a> of <code class="idl"><a data-link-type="idl" href="#xrdepthinformation" id="ref-for-xrdepthinformation⑥">XRDepthInformation</a></code> MUST be run.</p>
+   <div class="mdn-anno wrapped">
+    <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+    <div class="feature">
+     <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/XRWebGLBinding/getDepthInformation" title="The getDepthInformation() method of the XRWebGLBinding interface returns an XRWebGLDepthInformation object containing WebGL depth information.">XRWebGLBinding/getDepthInformation</a></p>
+     <p class="less-than-two-engines-text">In only one current engine.</p>
+     <div class="support">
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>90+</span></span>
+      <hr>
+      <span class="opera yes"><span>Opera</span><span>76+</span></span><span class="edge_blink yes"><span>Edge</span><span>90+</span></span>
+      <hr>
+      <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
+      <hr>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>90+</span></span><span class="webview_android no"><span>Android WebView</span><span>None</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>None</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>64+</span></span>
+     </div>
+    </div>
+   </div>
 <pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://immersive-web.github.io/layers/#xrwebglbinding" id="ref-for-xrwebglbinding"><c- g>XRWebGLBinding</c-></a> {
   <a data-link-type="idl-name" href="#xrwebgldepthinformation" id="ref-for-xrwebgldepthinformation①"><c- n>XRWebGLDepthInformation</c-></a>? <dfn class="dfn-paneled idl-code" data-dfn-for="XRWebGLBinding" data-dfn-type="method" data-export data-lt="getDepthInformation(view)" id="dom-xrwebglbinding-getdepthinformation"><code><c- g>getDepthInformation</c-></code></dfn>(<a data-link-type="idl-name" href="https://immersive-web.github.io/webxr/#xrview" id="ref-for-xrview④"><c- n>XRView</c-></a> <dfn class="idl-code" data-dfn-for="XRWebGLBinding/getDepthInformation(view)" data-dfn-type="argument" data-export id="dom-xrwebglbinding-getdepthinformation-view-view"><code><c- g>view</c-></code><a class="self-link" href="#dom-xrwebglbinding-getdepthinformation-view-view"></a></dfn>);
 };
@@ -1170,99 +1438,59 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    </section>
    <h2 class="heading settled" data-level="7" id="ack"><span class="secno">7. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
    <p>The following individuals have contributed to the design of the WebXR Depth Sensing specification:</p>
-  </main>
-  <div data-fill-with="conformance">
-   <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
-   <h3 class="no-ref no-num heading settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
-   <p>Conformance requirements are expressed
-    with a combination of descriptive assertions
-    and RFC 2119 terminology.
-    The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
-    in the normative parts of this document
-    are to be interpreted as described in RFC 2119.
-    However, for readability,
-    these words do not appear in all uppercase letters in this specification. </p>
-   <p>All of the text of this specification is normative
-    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
-   <p>Examples in this specification are introduced with the words “for example”
-    or are set apart from the normative text
-    with <code>class="example"</code>,
-    like this: </p>
-   <div class="example" id="w3c-example">
-    <a class="self-link" href="#w3c-example"></a> 
-    <p>This is an example of an informative example. </p>
-   </div>
-   <p>Informative notes begin with the word “Note”
-    and are set apart from the normative text
-    with <code>class="note"</code>,
-    like this: </p>
-   <p class="note" role="note">Note, this is an informative note. </p>
-   <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
-   <p>Requirements phrased in the imperative as part of algorithms
-    (such as "strip any leading space characters"
-    or "return false and abort these steps")
-    are to be interpreted with the meaning of the key word
-    ("must", "should", "may", etc)
-    used in introducing the algorithm. </p>
-   <p>Conformance requirements phrased as algorithms or specific steps
-    can be implemented in any manner,
-    so long as the end result is equivalent.
-    In particular, the algorithms defined in this specification
-    are intended to be easy to understand
-    and are not intended to be performant.
-    Implementers are encouraged to optimize. </p>
-  </div>
+   <p id="back-to-top" role="navigation"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p>
 <script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
+  </main>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#attempting-to-access-the-depth-buffer">attempting to access the depth buffer</a><span>, in §3.1</span>
-   <li><a href="#block-access">block access</a><span>, in §6</span>
-   <li><a href="#dom-xrdepthusage-cpu-optimized">"cpu-optimized"</a><span>, in §2.2</span>
-   <li><a href="#create-a-cpu-depth-information-instance">create a CPU depth information instance</a><span>, in §3.2</span>
-   <li><a href="#create-a-webgl-depth-information-instance">create a WebGL depth information instance</a><span>, in §3.3</span>
-   <li><a href="#dom-xrcpudepthinformation-data">data</a><span>, in §3.2</span>
-   <li><a href="#dom-xrdepthstateinit-dataformatpreference">dataFormatPreference</a><span>, in §2.3</span>
-   <li><a href="#xrdepthinformation-depth-buffer">depth buffer</a><span>, in §3.1</span>
-   <li><a href="#depth-coordinates-transformation-matrix">depth coordinates transformation matrix</a><span>, in §5.1</span>
-   <li><a href="#dom-xrsession-depthdataformat">depthDataFormat</a><span>, in §2.3</span>
-   <li><a href="#depth-sensing">depth-sensing</a><span>, in §2.1</span>
-   <li><a href="#dom-xrsessioninit-depthsensing">depthSensing</a><span>, in §2.3</span>
-   <li><a href="#dom-xrsession-depthusage">depthUsage</a><span>, in §2.3</span>
-   <li><a href="#find-supported-configuration-combination">find supported configuration combination</a><span>, in §2.3</span>
-   <li><a href="#dom-xrdepthdataformat-float32">"float32"</a><span>, in §2.2</span>
+   <li><a href="#attempting-to-access-the-depth-buffer">attempting to access the depth buffer</a><span>, in § 3.1</span>
+   <li><a href="#block-access">block access</a><span>, in § 6</span>
+   <li><a href="#dom-xrdepthusage-cpu-optimized">"cpu-optimized"</a><span>, in § 2.2</span>
+   <li><a href="#create-a-cpu-depth-information-instance">create a CPU depth information instance</a><span>, in § 3.2</span>
+   <li><a href="#create-a-webgl-depth-information-instance">create a WebGL depth information instance</a><span>, in § 3.3</span>
+   <li><a href="#dom-xrcpudepthinformation-data">data</a><span>, in § 3.2</span>
+   <li><a href="#dom-xrdepthstateinit-dataformatpreference">dataFormatPreference</a><span>, in § 2.3</span>
+   <li><a href="#xrdepthinformation-depth-buffer">depth buffer</a><span>, in § 3.1</span>
+   <li><a href="#depth-coordinates-transformation-matrix">depth coordinates transformation matrix</a><span>, in § 5.1</span>
+   <li><a href="#dom-xrsession-depthdataformat">depthDataFormat</a><span>, in § 2.3</span>
+   <li><a href="#depth-sensing">depth-sensing</a><span>, in § 2.1</span>
+   <li><a href="#dom-xrsessioninit-depthsensing">depthSensing</a><span>, in § 2.3</span>
+   <li><a href="#dom-xrsession-depthusage">depthUsage</a><span>, in § 2.3</span>
+   <li><a href="#find-supported-configuration-combination">find supported configuration combination</a><span>, in § 2.3</span>
+   <li><a href="#dom-xrdepthdataformat-float32">"float32"</a><span>, in § 2.2</span>
    <li>
     getDepthInformation(view)
     <ul>
-     <li><a href="#dom-xrframe-getdepthinformation">method for XRFrame</a><span>, in §3.2</span>
-     <li><a href="#dom-xrwebglbinding-getdepthinformation">method for XRWebGLBinding</a><span>, in §3.3</span>
-     <li><a href="#dom-xrwebgldepthinformation-getdepthinformation">method for XRWebGLDepthInformation</a><span>, in §3.3</span>
+     <li><a href="#dom-xrframe-getdepthinformation">method for XRFrame</a><span>, in § 3.2</span>
+     <li><a href="#dom-xrwebglbinding-getdepthinformation">method for XRWebGLBinding</a><span>, in § 3.3</span>
+     <li><a href="#dom-xrwebgldepthinformation-getdepthinformation">method for XRWebGLDepthInformation</a><span>, in § 3.3</span>
     </ul>
-   <li><a href="#dom-xrcpudepthinformation-getdepthinmeters">getDepthInMeters(x, y)</a><span>, in §3.2</span>
-   <li><a href="#dom-xrdepthusage-gpu-optimized">"gpu-optimized"</a><span>, in §2.2</span>
-   <li><a href="#dom-xrdepthinformation-height">height</a><span>, in §3.1</span>
-   <li><a href="#limit-the-amount-of-information">limit the amount of information</a><span>, in §6</span>
-   <li><a href="#dom-xrdepthdataformat-luminance-alpha">"luminance-alpha"</a><span>, in §2.2</span>
-   <li><a href="#native-depth-sensing">native depth sensing</a><span>, in §5.1</span>
-   <li><a href="#normalized-view-coordinates">normalized view coordinates</a><span>, in §1.1</span>
-   <li><a href="#dom-xrdepthinformation-normdepthbufferfromnormview">normDepthBufferFromNormView</a><span>, in §3.1</span>
-   <li><a href="#obtain-cpu-depth-information">obtain CPU depth information</a><span>, in §3.2</span>
-   <li><a href="#obtain-depth-at-coordinates">obtain depth at coordinates</a><span>, in §3.2</span>
-   <li><a href="#obtain-webgl-depth-information">obtain WebGL depth information</a><span>, in §3.3</span>
-   <li><a href="#dom-xrdepthinformation-rawvaluetometers">rawValueToMeters</a><span>, in §3.1</span>
-   <li><a href="#support-depth-sensing-data-format">support depth sensing data format</a><span>, in §5.1</span>
-   <li><a href="#support-depth-sensing-usage">support depth sensing usage</a><span>, in §5.1</span>
-   <li><a href="#support-depth-sensing-usage-and-data-format-combination">support depth sensing usage and data format combination</a><span>, in §5.1</span>
-   <li><a href="#dom-xrwebgldepthinformation-texture">texture</a><span>, in §3.3</span>
-   <li><a href="#dom-xrdepthstateinit-usagepreference">usagePreference</a><span>, in §2.3</span>
-   <li><a href="#xrdepthinformation-view">view</a><span>, in §3.1</span>
-   <li><a href="#dom-xrdepthinformation-width">width</a><span>, in §3.1</span>
-   <li><a href="#xrcpudepthinformation">XRCPUDepthInformation</a><span>, in §3.2</span>
-   <li><a href="#enumdef-xrdepthdataformat">XRDepthDataFormat</a><span>, in §2.2</span>
-   <li><a href="#xrdepthinformation">XRDepthInformation</a><span>, in §3.1</span>
-   <li><a href="#dictdef-xrdepthstateinit">XRDepthStateInit</a><span>, in §2.3</span>
-   <li><a href="#enumdef-xrdepthusage">XRDepthUsage</a><span>, in §2.2</span>
-   <li><a href="#xrwebgldepthinformation">XRWebGLDepthInformation</a><span>, in §3.3</span>
+   <li><a href="#dom-xrcpudepthinformation-getdepthinmeters">getDepthInMeters(x, y)</a><span>, in § 3.2</span>
+   <li><a href="#dom-xrdepthusage-gpu-optimized">"gpu-optimized"</a><span>, in § 2.2</span>
+   <li><a href="#dom-xrdepthinformation-height">height</a><span>, in § 3.1</span>
+   <li><a href="#limit-the-amount-of-information">limit the amount of information</a><span>, in § 6</span>
+   <li><a href="#dom-xrdepthdataformat-luminance-alpha">"luminance-alpha"</a><span>, in § 2.2</span>
+   <li><a href="#native-depth-sensing">native depth sensing</a><span>, in § 5.1</span>
+   <li><a href="#normalized-view-coordinates">normalized view coordinates</a><span>, in § 1.1</span>
+   <li><a href="#dom-xrdepthinformation-normdepthbufferfromnormview">normDepthBufferFromNormView</a><span>, in § 3.1</span>
+   <li><a href="#obtain-cpu-depth-information">obtain CPU depth information</a><span>, in § 3.2</span>
+   <li><a href="#obtain-depth-at-coordinates">obtain depth at coordinates</a><span>, in § 3.2</span>
+   <li><a href="#obtain-webgl-depth-information">obtain WebGL depth information</a><span>, in § 3.3</span>
+   <li><a href="#dom-xrdepthinformation-rawvaluetometers">rawValueToMeters</a><span>, in § 3.1</span>
+   <li><a href="#support-depth-sensing-data-format">support depth sensing data format</a><span>, in § 5.1</span>
+   <li><a href="#support-depth-sensing-usage">support depth sensing usage</a><span>, in § 5.1</span>
+   <li><a href="#support-depth-sensing-usage-and-data-format-combination">support depth sensing usage and data format combination</a><span>, in § 5.1</span>
+   <li><a href="#dom-xrwebgldepthinformation-texture">texture</a><span>, in § 3.3</span>
+   <li><a href="#dom-xrdepthstateinit-usagepreference">usagePreference</a><span>, in § 2.3</span>
+   <li><a href="#xrdepthinformation-view">view</a><span>, in § 3.1</span>
+   <li><a href="#dom-xrdepthinformation-width">width</a><span>, in § 3.1</span>
+   <li><a href="#xrcpudepthinformation">XRCPUDepthInformation</a><span>, in § 3.2</span>
+   <li><a href="#enumdef-xrdepthdataformat">XRDepthDataFormat</a><span>, in § 2.2</span>
+   <li><a href="#xrdepthinformation">XRDepthInformation</a><span>, in § 3.1</span>
+   <li><a href="#dictdef-xrdepthstateinit">XRDepthStateInit</a><span>, in § 2.3</span>
+   <li><a href="#enumdef-xrdepthusage">XRDepthUsage</a><span>, in § 2.2</span>
+   <li><a href="#xrwebgldepthinformation">XRWebGLDepthInformation</a><span>, in § 3.3</span>
   </ul>
   <aside class="dfn-panel" data-for="term-for-list-contain">
    <a href="https://infra.spec.whatwg.org/#list-contain">https://infra.spec.whatwg.org/#list-contain</a><b>Referenced in:</b>
@@ -1621,22 +1849,20 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-infra">[INFRA]
-   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
-   <dt id="biblio-rfc2119">[RFC2119]
-   <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-webgl-2">[WEBGL-2]
-   <dd>Dean Jackson; Jeff Gilbert. <a href="https://www.khronos.org/registry/webgl/specs/latest/2.0/">WebGL 2.0 Specification</a>. 12 August 2017. URL: <a href="https://www.khronos.org/registry/webgl/specs/latest/2.0/">https://www.khronos.org/registry/webgl/specs/latest/2.0/</a>
+   <dd>Dean Jackson; Jeff Gilbert. <a href="https://www.khronos.org/registry/webgl/specs/latest/2.0/"><cite>WebGL 2.0 Specification</cite></a>. 12 August 2017. URL: <a href="https://www.khronos.org/registry/webgl/specs/latest/2.0/">https://www.khronos.org/registry/webgl/specs/latest/2.0/</a>
    <dt id="biblio-webidl">[WebIDL]
-   <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/">Web IDL</a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
+   <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
    <dt id="biblio-webxr">[WEBXR]
-   <dd>Brandon Jones; Manish Goregaokar; Nell Waliczek. <a href="https://www.w3.org/TR/webxr/">WebXR Device API</a>. 24 July 2020. WD. URL: <a href="https://www.w3.org/TR/webxr/">https://www.w3.org/TR/webxr/</a>
+   <dd>Brandon Jones; Manish Goregaokar; Nell Waliczek. <a href="https://www.w3.org/TR/webxr/"><cite>WebXR Device API</cite></a>. 24 July 2020. WD. URL: <a href="https://www.w3.org/TR/webxr/">https://www.w3.org/TR/webxr/</a>
    <dt id="biblio-webxr-layers-1">[WEBXR-LAYERS-1]
    <dd>WebXR Layers API Level 1 URL: <a href="https://immersive-web.github.io/layers/">https://immersive-web.github.io/layers/</a>
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
    <dt id="biblio-webxr-ar-module-1">[WEBXR-AR-MODULE-1]
-   <dd>Brandon Jones; Nell Waliczek; Manish Goregaokar. <a href="https://www.w3.org/TR/webxr-ar-module-1/">WebXR Augmented Reality Module - Level 1</a>. 10 October 2019. WD. URL: <a href="https://www.w3.org/TR/webxr-ar-module-1/">https://www.w3.org/TR/webxr-ar-module-1/</a>
+   <dd>Brandon Jones; Nell Waliczek; Manish Goregaokar. <a href="https://www.w3.org/TR/webxr-ar-module-1/"><cite>WebXR Augmented Reality Module - Level 1</cite></a>. 10 October 2019. WD. URL: <a href="https://www.w3.org/TR/webxr-ar-module-1/">https://www.w3.org/TR/webxr-ar-module-1/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def"><c- b>enum</c-> <a href="#enumdef-xrdepthusage"><code><c- g>XRDepthUsage</c-></code></a> {
@@ -2043,6 +2269,14 @@ document.body.addEventListener("click", function(e) {
 
 });
 </script>
+<script>/* script-mdn-anno */
+
+            document.body.addEventListener("click", (e) => {
+                if(e.target.closest(".mdn-anno-btn")) {
+                    e.target.closest(".mdn-anno").classList.toggle("wrapped");
+                }
+            });
+            </script>
 <script>/* script-var-click-highlighting */
 
     document.addEventListener("click", e=>{
