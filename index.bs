@@ -1,8 +1,8 @@
 <pre class="metadata">
 Shortname: webxr-depth-sensing
 Title: WebXR Depth Sensing Module
-Group: immersivewebcg
-Status: CG-DRAFT
+Group: immersivewebwg
+Status: ED
 Level: 1
 ED: https://immersive-web.github.io/depth-sensing/
 Repository: immersive-web/depth-sensing
