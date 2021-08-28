@@ -576,9 +576,7 @@ Interpreting the results {#results-interpretation}
 
 The values stored in {{XRCPUDepthInformation/data}} and {{XRWebGLDepthInformation/texture}} represent distance from the camera plane to the real-world-geometry (as understood by the XR system). In the below example, the depth value at point <code>a = (x, y)</code> corresponds to the distance of point A to the camera plane. Specifically, the depth value does NOT represent the length of <b><i>aA</i></b> vector.
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/immersive-web/depth-sensing/main/img/depth_api_data_explained.png" alt="Depth API data explanation" width="557">
-</p>
+<img src="img/depth_api_data_explained.png" alt="Depth API data explanation" width="557">
 
 The above image corresponds to the following code:
 
