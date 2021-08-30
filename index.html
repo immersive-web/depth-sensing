@@ -685,7 +685,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">WebXR Depth Sensing Module</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-08-24">24 August 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-08-30">30 August 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1414,7 +1414,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <h2 class="heading settled" data-level="4" id="results-interpretation"><span class="secno">4. </span><span class="content">Interpreting the results</span><a class="self-link" href="#results-interpretation"></a></h2>
    <section class="non-normative">
     <p>The values stored in <code class="idl"><a data-link-type="idl" href="#dom-xrcpudepthinformation-data" id="ref-for-dom-xrcpudepthinformation-data⑦">data</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-xrwebgldepthinformation-texture" id="ref-for-dom-xrwebgldepthinformation-texture③">texture</a></code> represent distance from the camera plane to the real-world-geometry (as understood by the XR system). In the below example, the depth value at point <code>a = (x, y)</code> corresponds to the distance of point A to the camera plane. Specifically, the depth value does NOT represent the length of <b><i>aA</i></b> vector.</p>
-    <p align="center"> <img alt="Depth API data explanation" src="https://raw.githubusercontent.com/immersive-web/depth-sensing/main/img/depth_api_data_explained.png" width="557"> </p>
+    <p><img alt="Depth API data explanation" src="img/depth_api_data_explained.png" width="557"></p>
     <p>The above image corresponds to the following code:</p>
 <pre class="highlight"><c- c1>// depthInfo is of type XRCPUDepthInformation:</c->
 <c- a>const</c-> depthInMeters <c- o>=</c-> depthInfo<c- p>.</c->getDepthInMeters<c- p>(</c->x<c- p>,</c-> y<c- p>);</c->
@@ -1855,14 +1855,14 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <dt id="biblio-webidl">[WebIDL]
    <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
    <dt id="biblio-webxr">[WEBXR]
-   <dd>Brandon Jones; Manish Goregaokar; Nell Waliczek. <a href="https://www.w3.org/TR/webxr/"><cite>WebXR Device API</cite></a>. 24 July 2020. WD. URL: <a href="https://www.w3.org/TR/webxr/">https://www.w3.org/TR/webxr/</a>
+   <dd>Brandon Jones; et al. <a href="https://www.w3.org/TR/webxr/"><cite>WebXR Device API</cite></a>. 24 August 2021. WD. URL: <a href="https://www.w3.org/TR/webxr/">https://www.w3.org/TR/webxr/</a>
    <dt id="biblio-webxr-layers-1">[WEBXR-LAYERS-1]
    <dd>WebXR Layers API Level 1 URL: <a href="https://immersive-web.github.io/layers/">https://immersive-web.github.io/layers/</a>
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
    <dt id="biblio-webxr-ar-module-1">[WEBXR-AR-MODULE-1]
-   <dd>Brandon Jones; Nell Waliczek; Manish Goregaokar. <a href="https://www.w3.org/TR/webxr-ar-module-1/"><cite>WebXR Augmented Reality Module - Level 1</cite></a>. 10 October 2019. WD. URL: <a href="https://www.w3.org/TR/webxr-ar-module-1/">https://www.w3.org/TR/webxr-ar-module-1/</a>
+   <dd>Brandon Jones; et al. <a href="https://www.w3.org/TR/webxr-ar-module-1/"><cite>WebXR Augmented Reality Module - Level 1</cite></a>. 24 August 2021. WD. URL: <a href="https://www.w3.org/TR/webxr-ar-module-1/">https://www.w3.org/TR/webxr-ar-module-1/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def"><c- b>enum</c-> <a href="#enumdef-xrdepthusage"><code><c- g>XRDepthUsage</c-></code></a> {
