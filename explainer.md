@@ -19,8 +19,8 @@ Secondary use case of the Depth API would be to provide applications with data t
 1. Request the feature to be available on a session using its feature descriptor:
 
 ```javascript
-const session = await navigator.xr.requestSession(“immersive-ar”, {
-  requiredFeatures: [“depth-sensing”],
+const session = await navigator.xr.requestSession("immersive-ar", {
+  requiredFeatures: ["depth-sensing"],
   depthSensing: {
     usagePreference: ["cpu-optimized", "gpu-optimized"],
     formatPreference: ["luminance-alpha", "float32"]
