@@ -66,19 +66,18 @@ spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
   .tg th {
     border-style: solid;
     border-width: 1px;
-    background: #90b8de;
-    color: #fff;
+    background: var(--def-bg);
     font-family: sans-serif;
     font-weight: bold;
-    border-color: grey;
+    border-color: var(--def-border);
   }
   .tg td {
     padding: 4px 5px;
-    background-color: rgb(221, 238, 255);
+    background-color: var(--def-bg);
     font-family: monospace;
     border-style: solid;
     border-width: 1px;
-    border-color: grey;
+    border-color: var(--def-border);
     overflow: hidden;
     word-break: normal;
   }
