@@ -6,8 +6,9 @@
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version cace53f8c, updated Tue Dec 7 12:12:54 2021 -0800" name="generator">
+  <meta content="Bikeshed version 2e3c4c68b, updated Fri Jan 14 14:49:00 2022 -0800" name="generator">
   <link href="https://www.w3.org/TR/webxr-depth-sensing-1/" rel="canonical">
+  <meta content="a5649951f6489f93068a72a483a5de45fecb8bd0" name="document-revision">
 <style>
   .non-normative::before {
     content: "This section is non-normative.";
@@ -696,7 +697,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">WebXR Depth Sensing Module</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-01-05">5 January 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-02-15">15 February 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1280,7 +1281,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   [<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SameObject" id="ref-for-SameObject②"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.9" id="ref-for-5.9"><c- n>WebGLTexture</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="XRWebGLDepthInformation" data-dfn-type="attribute" data-export data-readonly data-type="WebGLTexture" id="dom-xrwebgldepthinformation-texture"><code><c- g>texture</c-></code></dfn>;
 };
 </pre>
-   <p>The <code class="idl"><a data-link-type="idl" href="#dom-xrwebgldepthinformation-texture" id="ref-for-dom-xrwebgldepthinformation-texture①">texture</a></code> attribute contains depth buffer information as an <a data-link-type="dfn" href="https://immersive-web.github.io/layers/#opaque-texture" id="ref-for-opaque-texture">opaque texture</a>. Each texel corresponds to distance from the <a data-link-type="dfn" href="#xrdepthinformation-view" id="ref-for-xrdepthinformation-view④">view</a>'s near plane to the users' environment, in unspecified units. The size of each data entry and the type is determined by <code class="idl"><a data-link-type="idl" href="#dom-xrsession-depthdataformat" id="ref-for-dom-xrsession-depthdataformat⑤">depthDataFormat</a></code>. The values can be converted from unspecified units to meters by multiplying them by <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-rawvaluetometers" id="ref-for-dom-xrdepthinformation-rawvaluetometers③">rawValueToMeters</a></code>. The <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-normdepthbufferfromnormview" id="ref-for-dom-xrdepthinformation-normdepthbufferfromnormview④">normDepthBufferFromNormView</a></code> can be used to transform from <a data-link-type="dfn" href="#normalized-view-coordinates" id="ref-for-normalized-view-coordinates②">normalized view coordinates</a> into depth buffer’s coordinate system. When accessed, the algorithm to <a data-link-type="dfn" href="#attempting-to-access-the-depth-buffer" id="ref-for-attempting-to-access-the-depth-buffer②">access the depth buffer</a> of <code class="idl"><a data-link-type="idl" href="#xrdepthinformation" id="ref-for-xrdepthinformation⑥">XRDepthInformation</a></code> MUST be run.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="#dom-xrwebgldepthinformation-texture" id="ref-for-dom-xrwebgldepthinformation-texture①">texture</a></code> attribute contains depth buffer information as an <a data-link-type="dfn" href="https://www.w3.org/TR/webxrlayers-1/#opaque-texture" id="ref-for-opaque-texture">opaque texture</a>. Each texel corresponds to distance from the <a data-link-type="dfn" href="#xrdepthinformation-view" id="ref-for-xrdepthinformation-view④">view</a>'s near plane to the users' environment, in unspecified units. The size of each data entry and the type is determined by <code class="idl"><a data-link-type="idl" href="#dom-xrsession-depthdataformat" id="ref-for-dom-xrsession-depthdataformat⑤">depthDataFormat</a></code>. The values can be converted from unspecified units to meters by multiplying them by <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-rawvaluetometers" id="ref-for-dom-xrdepthinformation-rawvaluetometers③">rawValueToMeters</a></code>. The <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-normdepthbufferfromnormview" id="ref-for-dom-xrdepthinformation-normdepthbufferfromnormview④">normDepthBufferFromNormView</a></code> can be used to transform from <a data-link-type="dfn" href="#normalized-view-coordinates" id="ref-for-normalized-view-coordinates②">normalized view coordinates</a> into depth buffer’s coordinate system. When accessed, the algorithm to <a data-link-type="dfn" href="#attempting-to-access-the-depth-buffer" id="ref-for-attempting-to-access-the-depth-buffer②">access the depth buffer</a> of <code class="idl"><a data-link-type="idl" href="#xrdepthinformation" id="ref-for-xrdepthinformation⑥">XRDepthInformation</a></code> MUST be run.</p>
    <div class="mdn-anno wrapped">
     <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
     <div class="feature">
@@ -1306,7 +1307,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <p>When <code class="idl"><a data-link-type="idl" href="#dom-xrwebglbinding-getdepthinformation" id="ref-for-dom-xrwebglbinding-getdepthinformation">getDepthInformation(view)</a></code> method is invoked on a <code class="idl"><a data-link-type="idl" href="https://immersive-web.github.io/layers/#xrwebglbinding" id="ref-for-xrwebglbinding②">XRWebGLBinding</a></code> <var>binding</var> with an <code class="idl"><a data-link-type="idl" href="https://immersive-web.github.io/webxr/#xrview" id="ref-for-xrview⑤">XRView</a></code> <var>view</var>, the user agent MUST <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="obtain-webgl-depth-information">obtain WebGL depth information</dfn> by running the following steps:</p>
     <ol>
      <li data-md>
-      <p>Let <var>session</var> be <var>binding</var>’s <a data-link-type="dfn">session</a>.</p>
+      <p>Let <var>session</var> be <var>binding</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxrlayers-1/#xrwebglbinding-session" id="ref-for-xrwebglbinding-session">session</a>.</p>
      <li data-md>
       <p>Let <var>frame</var> be <var>view</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrview-frame" id="ref-for-xrview-frame③">frame</a>.</p>
      <li data-md>
@@ -1351,7 +1352,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <li data-md>
       <p>Initialize <var>result</var>’s <code class="idl"><a data-link-type="idl" href="#dom-xrdepthinformation-normdepthbufferfromnormview" id="ref-for-dom-xrdepthinformation-normdepthbufferfromnormview⑤">normDepthBufferFromNormView</a></code> to a new <code class="idl"><a data-link-type="idl" href="https://immersive-web.github.io/webxr/#xrrigidtransform" id="ref-for-xrrigidtransform③">XRRigidTransform</a></code>, based on <var>nativeDepthInformation</var>’s <a data-link-type="dfn" href="#depth-coordinates-transformation-matrix" id="ref-for-depth-coordinates-transformation-matrix①">depth coordinates transformation matrix</a>.</p>
      <li data-md>
-      <p>Initialize <var>result</var>’s <code class="idl"><a data-link-type="idl" href="#dom-xrwebgldepthinformation-texture" id="ref-for-dom-xrwebgldepthinformation-texture②">texture</a></code> to an <a data-link-type="dfn" href="https://immersive-web.github.io/layers/#opaque-texture" id="ref-for-opaque-texture①">opaque texture</a> containing the depth buffer returned in <var>nativeDepthInformation</var>.</p>
+      <p>Initialize <var>result</var>’s <code class="idl"><a data-link-type="idl" href="#dom-xrwebgldepthinformation-texture" id="ref-for-dom-xrwebgldepthinformation-texture②">texture</a></code> to an <a data-link-type="dfn" href="https://www.w3.org/TR/webxrlayers-1/#opaque-texture" id="ref-for-opaque-texture①">opaque texture</a> containing the depth buffer returned in <var>nativeDepthInformation</var>.</p>
      <li data-md>
       <p>Initialize <var>result</var>’s <a data-link-type="dfn" href="#xrdepthinformation-view" id="ref-for-xrdepthinformation-view⑤">view</a> to <var>view</var>.</p>
      <li data-md>
@@ -1819,9 +1820,15 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-opaque-texture">
-   <a href="https://immersive-web.github.io/layers/#opaque-texture">https://immersive-web.github.io/layers/#opaque-texture</a><b>Referenced in:</b>
+   <a href="https://www.w3.org/TR/webxrlayers-1/#opaque-texture">https://www.w3.org/TR/webxrlayers-1/#opaque-texture</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-opaque-texture">3.3. XRWebGLDepthInformation</a> <a href="#ref-for-opaque-texture①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-xrwebglbinding-session">
+   <a href="https://www.w3.org/TR/webxrlayers-1/#xrwebglbinding-session">https://www.w3.org/TR/webxrlayers-1/#xrwebglbinding-session</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-xrwebglbinding-session">3.3. XRWebGLDepthInformation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-xrwebglbinding">
@@ -1899,6 +1906,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <a data-link-type="biblio">[webxr layers]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-opaque-texture">opaque texture</span>
+     <li><span class="dfn-paneled" id="term-for-xrwebglbinding-session">session</span>
     </ul>
    <li>
     <a data-link-type="biblio">[webxr-layers-1]</a> defines the following terms:
@@ -1918,14 +1926,14 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
    <dt id="biblio-webxr">[WEBXR]
-   <dd>Brandon Jones; Manish Goregaokar; Rik Cabanier. <a href="https://www.w3.org/TR/webxr/"><cite>WebXR Device API</cite></a>. 24 December 2021. WD. URL: <a href="https://www.w3.org/TR/webxr/">https://www.w3.org/TR/webxr/</a>
+   <dd>Brandon Jones; Manish Goregaokar; Rik Cabanier. <a href="https://www.w3.org/TR/webxr/"><cite>WebXR Device API</cite></a>. 8 February 2022. WD. URL: <a href="https://www.w3.org/TR/webxr/">https://www.w3.org/TR/webxr/</a>
    <dt id="biblio-webxr-layers-1">[WEBXR-LAYERS-1]
    <dd>WebXR Layers API Level 1 URL: <a href="https://immersive-web.github.io/layers/">https://immersive-web.github.io/layers/</a>
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
    <dt id="biblio-webxr-ar-module-1">[WEBXR-AR-MODULE-1]
-   <dd>Brandon Jones; Manish Goregaokar; Rik Cabanier. <a href="https://www.w3.org/TR/webxr-ar-module-1/"><cite>WebXR Augmented Reality Module - Level 1</cite></a>. 24 December 2021. WD. URL: <a href="https://www.w3.org/TR/webxr-ar-module-1/">https://www.w3.org/TR/webxr-ar-module-1/</a>
+   <dd>Brandon Jones; Manish Goregaokar; Rik Cabanier. <a href="https://www.w3.org/TR/webxr-ar-module-1/"><cite>WebXR Augmented Reality Module - Level 1</cite></a>. 3 February 2022. WD. URL: <a href="https://www.w3.org/TR/webxr-ar-module-1/">https://www.w3.org/TR/webxr-ar-module-1/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def"><c- b>enum</c-> <a href="#enumdef-xrdepthusage"><code><c- g>XRDepthUsage</c-></code></a> {
