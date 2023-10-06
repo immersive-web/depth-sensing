@@ -448,7 +448,7 @@ The {{XRWebGLDepthInformation/texture}} attribute contains depth buffer informat
 
 The {{XRWebGLDepthInformation/textureType}} attribute describes if the texture is of type {{TEXTURE_2D}} or {{TEXTURE_2D_ARRAY}}.
 
-The {{XRWebGLDepthInformation/imageIndex}} attribute returns the offset into the texture array. It MUST be defined when textureType is equal to {{TEXTURE_2D_ARRAY}} and MUST be undefined if it's {{TEXTURE_2D}}.
+The {{XRWebGLDepthInformation/imageIndex}} attribute returns the offset into the texture array. It MUST be defined when {{XRWebGLDepthInformation/textureType}} is equal to {{TEXTURE_2D_ARRAY}} and MUST be undefined if it's {{TEXTURE_2D}}.
 
 <script type="idl">
 partial interface XRWebGLBinding {
