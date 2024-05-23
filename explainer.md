@@ -23,7 +23,7 @@ const session = await navigator.xr.requestSession("immersive-ar", {
   requiredFeatures: ["depth-sensing"],
   depthSensing: {
     usagePreference: ["cpu-optimized", "gpu-optimized"],
-    formatPreference: ["luminance-alpha", "float32"]
+    dataFormatPreference: ["luminance-alpha", "float32"]
   }
 });
 ```
@@ -92,7 +92,7 @@ const viewCoordinates = [normalizedViewCoordinates[0] * viewport.width,
                          normalizedViewCoordinates[1] * viewport.height];
 ```
 
-**Note**: `XRFRame`'s `getDepthInformation()` method will only return a result if the depth API was configured with mode set to `"cpu-optimized"`. 
+**Note**: `XRFRame`'s `getDepthInformation()` method will only return a result if the depth API was configured with mode set to `"cpu-optimized"`.
 
  - `"gpu-optimized"` usage mode:
 
