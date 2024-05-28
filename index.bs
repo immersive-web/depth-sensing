@@ -28,12 +28,16 @@ spec: WebGL; urlPrefix: https://www.khronos.org/registry/webgl/specs/latest/1.0/
     type: interface; text: WebGLTexture; url: 5.9
     for: GLenum;
         type: dfn; text: LUMINANCE_ALPHA; url: 5.14
+    type: typedef; text: TEXTURE_2D; url: 5.14
 spec: WebGL 2.0; urlPrefix: https://www.khronos.org/registry/webgl/specs/latest/2.0/#
     for: GLenum;
         type: dfn; text: R32F; url: 3.7
+    type: typedef; text: TEXTURE_2D_ARRAY; url: 3.7
 spec: WebXR Layers; urlPrefix: https://www.w3.org/TR/webxrlayers-1/#
     type: dfn; text: opaque texture; url: opaque-texture
     type: dfn; text: session; for: XRWebGLBinding; url: xrwebglbinding-session
+    type: dfn; text: texture;for: XRTextureType; url: dom-xrtexturetype-texture
+    type: dfn; text: texture-array;for: XRTextureType; url: dom-xrtexturetype-texture-array
 spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
     type: dfn; text: capable of supporting; url: capable-of-supporting
     type: dfn; text: feature descriptor; url: feature-descriptor
@@ -434,10 +438,17 @@ XRWebGLDepthInformation {#xr-gpu-depth-info-section}
 [Exposed=Window]
 interface XRWebGLDepthInformation : XRDepthInformation {
   [SameObject] readonly attribute WebGLTexture texture;
+
+  readonly attribute XRTextureType textureType;
+  readonly attribute unsigned long? imageIndex;
 };
 </script>
 
 The {{XRWebGLDepthInformation/texture}} attribute contains depth buffer information as an [=opaque texture=]. Each texel corresponds to distance from the [=XRDepthInformation/view=]'s near plane to the users' environment, in unspecified units. The size of each data entry and the type is determined by {{XRSession/depthDataFormat}}. The values can be converted from unspecified units to meters by multiplying them by {{XRDepthInformation/rawValueToMeters}}. The {{XRDepthInformation/normDepthBufferFromNormView}} can be used to transform from [=normalized view coordinates=] into depth buffer's coordinate system. When accessed, the algorithm to <a lt="attempt to access the depth buffer">access the depth buffer</a> of {{XRDepthInformation}} MUST be run.
+
+The {{XRWebGLDepthInformation/textureType}} attribute describes if the texture is of type {{TEXTURE_2D}} or {{TEXTURE_2D_ARRAY}}.
+
+The {{XRWebGLDepthInformation/imageIndex}} attribute returns the offset into the texture array. It MUST be defined when {{XRWebGLDepthInformation/textureType}} is equal to {{TEXTURE_2D_ARRAY}} and MUST be undefined if it's {{TEXTURE_2D}}.
 
 <script type="idl">
 partial interface XRWebGLBinding {
@@ -479,6 +490,23 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
     1. Initialize |result|'s {{XRDepthInformation/normDepthBufferFromNormView}} to a new {{XRRigidTransform}}, based on |nativeDepthInformation|'s [=depth coordinates transformation matrix=].
     1. Initialize |result|'s {{XRWebGLDepthInformation/texture}} to an [=opaque texture=] containing the depth buffer returned in |nativeDepthInformation|.
     1. Initialize |result|'s [=XRDepthInformation/view=] to |view|.
+    1. Initialize |result|'s {{XRWebGLDepthInformation/textureType}} as follows:
+          <dl class="switch">
+            <dt> If the |result|'s {{XRWebGLDepthInformation/texture}} was created with a textureType of [=XRTextureType/texture-array=]:
+              <dd> Initialize |result|'s {{XRWebGLDepthInformation/textureType}} to "[=XRTextureType/texture-array=]".
+            <dt> Otherwise
+              <dd> Initialize |result|'s {{XRWebGLDepthInformation/textureType}} to "[=XRTextureType/texture=]".
+          </dl>
+    1. Initialize |result|'s {{XRWebGLDepthInformation/imageIndex}} as follows:
+          <dl class="switch">
+            <dt class="switch">If {{XRWebGLDepthInformation/textureType}} is [=XRTextureType/texture=]
+              <dd> Initialize |result|'s {{XRWebGLDepthInformation/imageIndex}} to <code>null</code>.
+            <dt> Else if |view|'s {{XRView/eye}} is {{XREye/"right"}}
+              <dd> Initialize |result|'s {{XRWebGLDepthInformation/imageIndex}} to <code>1</code>.
+            <dt> Otherwise
+              <dd> Initialize |result|'s {{XRWebGLDepthInformation/imageIndex}} to <code>0</code>.
+            </dl>
+          </dl>
     1. Return |result|.
 
 </div>
