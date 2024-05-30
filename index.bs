@@ -162,12 +162,12 @@ enum XRDepthUsage {
 enum XRDepthDataFormat {
   "luminance-alpha",
   "float32",
-  "unsigned-int",
+  "unsigned-short",
 };
 </script>
 
-- A data format of <dfn enum-value for="XRDepthDataFormat">"luminance-alpha"</dfn> or <dfn enum-value for="XRDepthDataFormat">"unsigned-int"</dfn> indicates that items in the depth data buffers obtained from the API are 2-byte unsigned integer values.
-- A data format <dfn enum-value for="XRDepthDataFormat">"float32"</dfn> indicates that items in the depth data buffers obtained from the API are 4-byte floating point values.
+- A data format of <dfn enum-value for="XRDepthDataFormat">"luminance-alpha"</dfn> or <dfn enum-value for="XRDepthDataFormat">"unsigned-short"</dfn> indicates that items in the depth data buffers obtained from the API are 16 bit unsigned integer values.
+- A data format <dfn enum-value for="XRDepthDataFormat">"float32"</dfn> indicates that items in the depth data buffers obtained from the API are 32 bit floating point values.
 
 The following table summarizes the ways various data formats can be consumed:
 
@@ -185,21 +185,21 @@ The following table summarizes the ways various data formats can be consumed:
     <tr>
       <td>{{XRDepthDataFormat/"luminance-alpha"}}</td>
       <td>[=GLenum/LUMINANCE_ALPHA=]</td>
-      <td>2 bytes</dt>
+      <td>2 times 8 bit</dt>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Uint16Array}}</td>
       <td>Inspect Luminance and Alpha channels to reassemble single value.</td>
     </tr>
     <tr>
       <td>{{XRDepthDataFormat/"float32"}}</td>
       <td>[=GLenum/R32F=]</td>
-      <td>4 bytes</dt>
+      <td>32 bit</dt>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Float32Array}}</td>
       <td>Inspect Red channel and use the value.</td>
     </tr>
     <tr>
-      <td>{{XRDepthDataFormat/"unsigned-int"}}</td>
+      <td>{{XRDepthDataFormat/"unsigned-short"}}</td>
       <td>[=GLenum/R16UI=]</td>
-      <td>2 bytes</dt>
+      <td>16 bit</dt>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Uint16Array}}</td>
       <td>Inspect Red channel and use the value.</td>
     </tr>
@@ -238,16 +238,26 @@ When an {{XRSession}} is created with depth sensing enabled, the {{XRSession/dep
 In order to <dfn>find supported configuration combination</dfn> for depth sensing API given |usagePreference| and |dataFormatPreference| sequences, the user agent MUST run the following algorithm:
 
   1. Let |selectedUsage| be <code>null</code>.
-  1. If the |usagePreference| sequence is empty, set |selectedUsage| to the device's preferred [=native depth sensing=] capability.
-  1. For each |usage| in |usagePreference| sequence, perform the following steps:
-    1. If |usage| is not considered a <a lt="support depth sensing usage">supported depth sensing usage</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
-    1. Set |selectedUsage| to |usage| and abort these nested steps.
+  1. Initialize |selectedUsage| as follows:
+    <dl class="switch">
+      <dt class="switch">If the |usagePreference| sequence is empty
+        <dd> Initialize |selectedUsage| to the device's preferred [=native depth sensing=] capability.
+      <dt> Otherwise
+        <dd>  For each |usage| in |usagePreference| sequence, perform the following steps:
+          1. If |usage| is not considered a <a lt="support depth sensing usage">supported depth sensing usage</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+          1. Set |selectedUsage| to |usage| and abort these nested steps.
+      </dl>
   1. If |selectedUsage| is <code>null</code>, return <code>null</code> and abort these steps.
   1. Let |selectedDataFormat| be <code>null</code>.
-  1. If the |dataFormatPreference| sequence is empty, set |selectedDataFormat| to the device's preferred [=native depth sensing=] format.
-  1. For each |dataFormat| in |dataFormatPreference|, perform the following steps:
-    1. If |selectedUsage|,|dataFormat| is not considered a <a lt="support depth sensing usage and data format combination">supported depth sensng usage and data format combination</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
-    1. Set |selectedDataFormat| to |dataFormat| and abort these nested steps.
+  1. Initialize |selectedDataFormat| as follows:
+    <dl class="switch">
+      <dt class="switch">If the |usagePreference| sequence is empty
+        <dd> Initialize |selectedDataFormat| to the device's preferred [=native depth sensing=] format.
+      <dt> Otherwise
+        <dd>  For each |dataFormat| in |dataFormatPreference|, perform the following steps:
+          1. If |selectedUsage|,|dataFormat| is not considered a <a lt="support depth sensing usage and data format combination">supported depth sensng usage and data format combination</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+          1. Set |selectedDataFormat| to |dataFormat| and abort these nested steps.
+      </dl>
   1. If |selectedDataFormat| is <code>null</code>, return <code>null</code> and abort these steps.
   1. Return |selectedUsage|,|selectedDataFormat|.
 
@@ -642,7 +652,7 @@ The device can <dfn>support depth sensing usage</dfn> in 2 ways. If the device i
 
 Note: The user agent can choose to support both usage modes (e.g. when the device is capable of providing both CPU- and GPU-accessible data, or by performing the transfer between CPU- and GPU-accessible data manually).
 
-The device can <dfn>support depth sensing data format</dfn> given depth sensing usage in the following ways. If, given the depth sensing usage, the device is able to return depth data as a buffer containing 2-byte unsigned integers, it is said to support the {{XRDepthDataFormat/"luminance-alpha"}} or {{XRDepthDataFormat/"unsigned-int"}} data format. If, given the depth sensing usage, the device is able to return depth data as a buffer containing 4-byte floating point values, it is said to support the {{XRDepthDataFormat/"float32"}} data format.
+The device can <dfn>support depth sensing data format</dfn> given depth sensing usage in the following ways. If, given the depth sensing usage, the device is able to return depth data as a buffer containing 16 bit unsigned integers, it is said to support the {{XRDepthDataFormat/"luminance-alpha"}} or {{XRDepthDataFormat/"unsigned-short"}} data format. If, given the depth sensing usage, the device is able to return depth data as a buffer containing 32 bit floating point values, it is said to support the {{XRDepthDataFormat/"float32"}} data format.
 
 The device is said to <dfn>support depth sensing usage and data format combination</dfn> if it <a lt="support depth sensing usage">supports depth sensing usage</a> and <a lt="support depth sensing data format">supports depth sensing data format</a> given the specified usage.
 
