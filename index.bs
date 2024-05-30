@@ -241,7 +241,7 @@ In order to <dfn>find supported configuration combination</dfn> for depth sensin
   1. Initialize |selectedUsage| as follows:
     <dl class="switch">
       <dt class="switch">If the |usagePreference| sequence is empty
-        <dd> Initialize |selectedUsage| to the device's preferred [=native depth sensing=] capability.
+        <dd> Initialize |selectedUsage| to the device's [=preferred native depth sensing capability=].
       <dt> Otherwise
         <dd>  For each |usage| in |usagePreference| sequence, perform the following steps:
           1. If |usage| is not considered a <a lt="support depth sensing usage">supported depth sensing usage</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
@@ -252,7 +252,7 @@ In order to <dfn>find supported configuration combination</dfn> for depth sensin
   1. Initialize |selectedDataFormat| as follows:
     <dl class="switch">
       <dt class="switch">If the |usagePreference| sequence is empty
-        <dd> Initialize |selectedDataFormat| to the device's preferred [=native depth sensing=] format.
+        <dd> Initialize |selectedDataFormat| to the device's [=preferred native depth sensing format=].
       <dt> Otherwise
         <dd>  For each |dataFormat| in |dataFormatPreference|, perform the following steps:
           1. If |selectedUsage|,|dataFormat| is not considered a <a lt="support depth sensing usage and data format combination">supported depth sensng usage and data format combination</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
@@ -657,6 +657,8 @@ The device can <dfn>support depth sensing data format</dfn> given depth sensing 
 The device is said to <dfn>support depth sensing usage and data format combination</dfn> if it <a lt="support depth sensing usage">supports depth sensing usage</a> and <a lt="support depth sensing data format">supports depth sensing data format</a> given the specified usage.
 
 Note: the support of depth sensing API is not limited only to hardware classified as AR-capable, although it is expected that the feature will be more common in such devices. VR devices that contain appropriate sensors and/or use other techniques to provide depth buffer should also be able to provide the data necessary to implement depth sensing API.
+
+The device MUST have a <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the {{XRDepthStateInit/usagePreference}} array is empty, and a <dfn>preferred [=native depth sensing=] format</dfn> that MUST be used if the {{XRDepthStateInit/dataFormatPreference}} array is empty. The capability and format SHOULD reflect the most efficient ones of the device.
 
 </section>
 
