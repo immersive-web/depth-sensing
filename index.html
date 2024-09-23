@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://www.w3.org/TR/webxr-depth-sensing-1/" rel="canonical">
-  <meta content="dcb4d23d9e3f07d3731f3fc0a9a0555fa293998b" name="document-revision">
+  <meta content="7b354a29eab25cda817fc39a28ac1acc86ffde86" name="document-revision">
 <style>
   .non-normative::before {
     content: "This section is non-normative.";
@@ -940,7 +940,7 @@ var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">WebXR Depth Sensing Module</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2024-05-31">31 May 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2024-09-23">23 September 2024</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -980,12 +980,12 @@ var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
    <p> Publication as an Editors' Draft does not imply endorsement by <abbr title="World Wide Web Consortium">W3C</abbr> and its Members. This is a draft document and may
     be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite
     this document as other than work in progress. </p>
-   <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy/">W3C Patent Policy</a>.
+   <p> This document was produced by a group operating under the <a href="https://www.w3.org/policies/patent-policy/">W3C Patent Policy</a>.
     W3C maintains a <a href="https://www.w3.org/groups/wg/immersive-web/ipr" rel="disclosure">public list of any patent
-    disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy/#def-essential">Essential
-    Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy/#sec-Disclosure">section
+    disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential
+    Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section
     6 of the W3C Patent Policy</a>. </p>
-   <p> This document is governed by the <a href="https://www.w3.org/2023/Process-20231103/" id="w3c_process_revision">03 November 2023 W3C Process Document</a>. </p>
+   <p> This document is governed by the <a href="https://www.w3.org/policies/process/20231103/" id="w3c_process_revision">03 November 2023 W3C Process Document</a>. </p>
    <p></p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -1282,7 +1282,7 @@ var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
      <li data-md>
       <p>Let <var>session</var> be <var>frame</var>’s <code class="idl"><a data-link-type="idl" href="https://immersive-web.github.io/webxr/#dom-xrframe-session" id="ref-for-dom-xrframe-session①">session</a></code>.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="#depth-sensing" id="ref-for-depth-sensing①">depth-sensing</a> feature descriptor is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">contained</a> in the <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-xr-device" id="ref-for-xrsession-xr-device">XR device</a>'s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xr-device-list-of-enabled-features" id="ref-for-xr-device-list-of-enabled-features">list of enabled features</a> for <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-mode" id="ref-for-xrsession-mode">mode</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw②">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror②">NotSupportedError</a></code> and abort these steps.</p>
+      <p>If <a data-link-type="dfn" href="#depth-sensing" id="ref-for-depth-sensing①">depth-sensing</a> feature descriptor is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">contained</a> in the <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-xr-device" id="ref-for-xrsession-xr-device">XR device</a>'s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#dom-xrsession-enabledfeatures" id="ref-for-dom-xrsession-enabledfeatures">list of enabled features</a> for <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-mode" id="ref-for-xrsession-mode">mode</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw②">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror②">NotSupportedError</a></code> and abort these steps.</p>
      <li data-md>
       <p>If <var>frame</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrframe-active" id="ref-for-xrframe-active①">active</a> boolean is <code>false</code>, throw an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror④">InvalidStateError</a></code> and abort these steps.</p>
      <li data-md>
@@ -1384,7 +1384,7 @@ var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
      <li data-md>
       <p>If <var>session</var> does not match <var>frame</var>’s <code class="idl"><a data-link-type="idl" href="https://immersive-web.github.io/webxr/#dom-xrframe-session" id="ref-for-dom-xrframe-session③">session</a></code>, throw an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror⑧">InvalidStateError</a></code> and abort these steps.</p>
      <li data-md>
-      <p>If <a data-link-type="dfn" href="#depth-sensing" id="ref-for-depth-sensing②">depth-sensing</a> feature descriptor is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contained</a> in the <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-xr-device" id="ref-for-xrsession-xr-device②">XR device</a>'s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xr-device-list-of-enabled-features" id="ref-for-xr-device-list-of-enabled-features①">list of enabled features</a> for <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-mode" id="ref-for-xrsession-mode①">mode</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw④">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror③">NotSupportedError</a></code> and abort these steps.</p>
+      <p>If <a data-link-type="dfn" href="#depth-sensing" id="ref-for-depth-sensing②">depth-sensing</a> feature descriptor is not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contained</a> in the <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-xr-device" id="ref-for-xrsession-xr-device②">XR device</a>'s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#dom-xrsession-enabledfeatures" id="ref-for-dom-xrsession-enabledfeatures①">list of enabled features</a> for <var>session</var>’s <a data-link-type="dfn" href="https://www.w3.org/TR/webxr/#xrsession-mode" id="ref-for-xrsession-mode①">mode</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw④">throw</a> a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror③">NotSupportedError</a></code> and abort these steps.</p>
      <li data-md>
       <p>If the <var>session</var>’s <code class="idl"><a data-link-type="idl" href="#dom-xrsession-depthusage" id="ref-for-dom-xrsession-depthusage④">depthUsage</a></code> is not <code class="idl"><a data-link-type="idl" href="#dom-xrdepthusage-gpu-optimized" id="ref-for-dom-xrdepthusage-gpu-optimized①">"gpu-optimized"</a></code>, throw an <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror⑨">InvalidStateError</a></code> and abort these steps.</p>
      <li data-md>
@@ -1718,7 +1718,7 @@ var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
      <li><span class="dfn-paneled" id="3d17a932">feature policy</span>
      <li><span class="dfn-paneled" id="b12ee965">frame</span>
      <li><span class="dfn-paneled" id="e76130a4">inline xr device</span>
-     <li><span class="dfn-paneled" id="777380a2">list of enabled features</span>
+     <li><span class="dfn-paneled" id="f65f5f8f">list of enabled features</span>
      <li><span class="dfn-paneled" id="61b0a516">mode</span>
      <li><span class="dfn-paneled" id="a1afb5ed">time</span>
      <li><span class="dfn-paneled" id="0b7e2439">xr device</span>
@@ -2390,7 +2390,7 @@ window.dfnpanelData['6779156f'] = {"dfnID": "6779156f", "url": "https://www.w3.o
 window.dfnpanelData['3d17a932'] = {"dfnID": "3d17a932", "url": "https://www.w3.org/TR/webxr/#feature-policy", "dfnText": "feature policy", "refSections": [{"refs": [{"id": "ref-for-feature-policy"}], "title": "2.1. Feature descriptor"}], "external": true};
 window.dfnpanelData['b12ee965'] = {"dfnID": "b12ee965", "url": "https://www.w3.org/TR/webxr/#xrview-frame", "dfnText": "frame", "refSections": [{"refs": [{"id": "ref-for-xrview-frame"}], "title": "3.1. XRDepthInformation"}, {"refs": [{"id": "ref-for-xrview-frame\u2460"}, {"id": "ref-for-xrview-frame\u2461"}], "title": "3.2. XRCPUDepthInformation"}, {"refs": [{"id": "ref-for-xrview-frame\u2462"}], "title": "3.3. XRWebGLDepthInformation"}], "external": true};
 window.dfnpanelData['e76130a4'] = {"dfnID": "e76130a4", "url": "https://www.w3.org/TR/webxr/#inline-xr-device", "dfnText": "inline xr device", "refSections": [{"refs": [{"id": "ref-for-inline-xr-device"}], "title": "2.1. Feature descriptor"}], "external": true};
-window.dfnpanelData['777380a2'] = {"dfnID": "777380a2", "url": "https://www.w3.org/TR/webxr/#xr-device-list-of-enabled-features", "dfnText": "list of enabled features", "refSections": [{"refs": [{"id": "ref-for-xr-device-list-of-enabled-features"}], "title": "3.2. XRCPUDepthInformation"}, {"refs": [{"id": "ref-for-xr-device-list-of-enabled-features\u2460"}], "title": "3.3. XRWebGLDepthInformation"}], "external": true};
+window.dfnpanelData['f65f5f8f'] = {"dfnID": "f65f5f8f", "url": "https://www.w3.org/TR/webxr/#dom-xrsession-enabledfeatures", "dfnText": "list of enabled features", "refSections": [{"refs": [{"id": "ref-for-dom-xrsession-enabledfeatures"}], "title": "3.2. XRCPUDepthInformation"}, {"refs": [{"id": "ref-for-dom-xrsession-enabledfeatures\u2460"}], "title": "3.3. XRWebGLDepthInformation"}], "external": true};
 window.dfnpanelData['61b0a516'] = {"dfnID": "61b0a516", "url": "https://www.w3.org/TR/webxr/#xrsession-mode", "dfnText": "mode", "refSections": [{"refs": [{"id": "ref-for-xrsession-mode"}], "title": "3.2. XRCPUDepthInformation"}, {"refs": [{"id": "ref-for-xrsession-mode\u2460"}], "title": "3.3. XRWebGLDepthInformation"}], "external": true};
 window.dfnpanelData['a1afb5ed'] = {"dfnID": "a1afb5ed", "url": "https://www.w3.org/TR/webxr/#xrframe-time", "dfnText": "time", "refSections": [{"refs": [{"id": "ref-for-xrframe-time"}], "title": "3.2. XRCPUDepthInformation"}, {"refs": [{"id": "ref-for-xrframe-time\u2460"}], "title": "3.3. XRWebGLDepthInformation"}], "external": true};
 window.dfnpanelData['0b7e2439'] = {"dfnID": "0b7e2439", "url": "https://www.w3.org/TR/webxr/#xrsession-xr-device", "dfnText": "xr device", "refSections": [{"refs": [{"id": "ref-for-xrsession-xr-device"}, {"id": "ref-for-xrsession-xr-device\u2460"}], "title": "3.2. XRCPUDepthInformation"}, {"refs": [{"id": "ref-for-xrsession-xr-device\u2461"}, {"id": "ref-for-xrsession-xr-device\u2462"}], "title": "3.3. XRWebGLDepthInformation"}], "external": true};
