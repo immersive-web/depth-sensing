@@ -324,7 +324,7 @@ interface XRDepthInformation {
 
   [SameObject] readonly attribute XRRigidTransform normDepthBufferFromNormView;
   readonly attribute float rawValueToMeters;
-  readonly attribute Float32Array? projectionMatrix;
+  readonly attribute XRView? view;
 };
 </script>
 
@@ -338,7 +338,7 @@ Note: if the applications intend to use the resulting depth buffer for texturing
 
 The {{XRDepthInformation/rawValueToMeters}} attribute contains the scale factor by which the raw depth values from a [=XRDepthInformation/depth buffer=] must be multiplied in order to get the depth in meters.
 
-The optional {{XRDepthInformation/projectionMatrix}} attribute contains the projection matrix that was used when the {{XRSystem}} calculated the {{XRDepthInformation}}. This attribute MAY be used by experiences to better align with the real world. If the {{XRDepthInformation/projectionMatrix}} is not provided, the user MUST assume it is the same as the {{XRView/projectionMatrix}}.
+The optional {{XRDepthInformation/view}} attribute contains the {{XRView}} that was active when the {{XRSystem}} calculated the {{XRDepthInformation}}. This attribute MAY be used by experiences to better align with the real world. If the {{XRDepthInformation/view}} is not provided, the user MUST assume it is the same as the one from the current {{XRFrame}}'s {{XRViewerPose}}.
 
 Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> that stores {{XRView}} from which the depth information instance was created.
 
