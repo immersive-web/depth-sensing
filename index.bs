@@ -145,8 +145,18 @@ A device is [=capable of supporting=] the depth sensing feature if the device ex
 
 The depth sensing feature is subject to [=feature policy=] and requires <code>"xr-spatial-tracking"</code> policy to be allowed on the requesting document's origin.
 
-Intended data usage and data formats {#usage-and-formats}
+Intended depth type, data usage, and data formats {#usage-and-formats}
 ------------------------------------
+
+<script type="idl">
+enum XRDepthType {
+  "raw",
+  "smooth",
+};
+</script>
+
+- An usage of <dfn enum-value for="XRDepthType">"raw"</dfn> indicates that no additional processing of the depth data should be done.
+- An usage of <dfn enum-value for="XRDepthType">"smooth"</dfn> indicates that the runtime should perform additional processing on the depth texture to remove potential noise.
 
 <script type="idl">
 enum XRDepthUsage {
@@ -213,12 +223,15 @@ Session configuration {#session-configuration}
 dictionary XRDepthStateInit {
   required sequence<XRDepthUsage> usagePreference;
   required sequence<XRDepthDataFormat> dataFormatPreference;
+  sequence<XRDepthType> depthTypePreference;
 };
 </script>
 
 The {{XRDepthStateInit/usagePreference}} is an ordered sequence of {{XRDepthUsage}}s, used to describe the desired depth sensing usage for the session.
 
 The {{XRDepthStateInit/dataFormatPreference}} is an ordered sequence of {{XRDepthDataFormat}}s, used to describe the desired depth sensing data format for the session.
+
+The {{XRDepthStateInit/depthTypePreference}} is an ordered sequence of {{XRDepthType}}s, used to describe the desired depth sensing type for the session.
 
 The {{XRSessionInit}} dictionary is expanded by adding new {{XRSessionInit/depthSensing}} key. The key is optional in {{XRSessionInit}}, but it MUST be provided when [=depth-sensing=] is included in either {{XRSessionInit/requiredFeatures}} or {{XRSessionInit/optionalFeatures}}.
 
@@ -230,36 +243,52 @@ partial dictionary XRSessionInit {
 
 If the depth sensing feature is a required feature but the application did not supply a {{XRSessionInit/depthSensing}} key, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
 
-if the depth sensing feature is a required feature but the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit/usagePreference}} and {{XRDepthStateInit/dataFormatPreference}} is <code>null</code>, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
+if the depth sensing feature is a required feature but the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}} is <code>null</code>, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
 
-When an {{XRSession}} is created with depth sensing enabled, the {{XRSession/depthUsage}} and {{XRSession/depthDataFormat}} attributes MUST be set to the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit/usagePreference}} and {{XRDepthStateInit/dataFormatPreference}}.
+When an {{XRSession}} is created with depth sensing enabled, the {{XRSession/depthUsage}}, {{XRSession/depthDataFormat}}, and {{XRSession/depthType}} attributes MUST be set to the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}}.
 
 <div class="algorithm" data-algorithm="find-supported-configuration">
-In order to <dfn>find supported configuration combination</dfn> for depth sensing API given |usagePreference| and |dataFormatPreference| sequences, the user agent MUST run the following algorithm:
+In order to <dfn>find supported configuration combination</dfn> for depth sensing API given |depthStateInit| dictionary, the user agent MUST run the following algorithm:
 
+  1. Let |depthTypePreference| be the value contained by the {{XRDepthStateInit/depthTypePreference}} key in |depthStateInit| if it is set, and an empty sequence otherwise.
+  1. Let |selectedType| be <code>null</code>
+  1. If the |depthTypePreference| sequence contains a single value, set |selectedType| to that value.
+  1. If |selectedType| is not <code>null</code> and not considered a <a lt="support depth sensing type">supported depth sensing type</a> by the [=native depth sensing=] capabilities of the device, return <code>null</code> and abort these steps.
+  1. Let |usagePreference| be the value contained by the {{XRDepthStateInit/usagePreference}} key in |depthStateInit|
   1. Let |selectedUsage| be <code>null</code>.
   1. Initialize |selectedUsage| as follows:
     <dl class="switch">
       <dt class="switch">If the |usagePreference| sequence is empty
-        <dd> Initialize |selectedUsage| to the device's [=preferred native depth sensing capability=].
+        <dd> Initialize |selectedUsage| to the device's [=preferred native depth sensing capability=] for |selectedType|.
       <dt> Otherwise
         <dd>  For each |usage| in |usagePreference| sequence, perform the following steps:
           1. If |usage| is not considered a <a lt="support depth sensing usage">supported depth sensing usage</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
           1. Set |selectedUsage| to |usage| and abort these nested steps.
       </dl>
   1. If |selectedUsage| is <code>null</code>, return <code>null</code> and abort these steps.
+  1. Let |dataFormatPreference| be the value contained by the {{XRDepthStateInit/dataFormatPreference}} key in |depthStateInit|
   1. Let |selectedDataFormat| be <code>null</code>.
   1. Initialize |selectedDataFormat| as follows:
     <dl class="switch">
       <dt class="switch">If the |usagePreference| sequence is empty
-        <dd> Initialize |selectedDataFormat| to the device's [=preferred native depth sensing format=].
+        <dd> Initialize |selectedDataFormat| to the device's [=preferred native depth sensing format=] for |selectedType| and |selectedUsage|.
       <dt> Otherwise
         <dd>  For each |dataFormat| in |dataFormatPreference|, perform the following steps:
-          1. If |selectedUsage|,|dataFormat| is not considered a <a lt="support depth sensing usage and data format combination">supported depth sensng usage and data format combination</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+          1. If |selectedType|,|selectedUsage|,|dataFormat| is not considered a <a lt="support the depth sensing configuration">supported depth sensing configuration</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
           1. Set |selectedDataFormat| to |dataFormat| and abort these nested steps.
       </dl>
   1. If |selectedDataFormat| is <code>null</code>, return <code>null</code> and abort these steps.
-  1. Return |selectedUsage|,|selectedDataFormat|.
+  1. If |selectedType| is <code>null</code>, initialize |selectedType| as follows:
+    <dl class="switch">
+      <dt class="switch">If the |depthTypePreference| sequence is empty
+        <dd> Initialize |selectedType| to the device's [=preferred native depth sensing type=] for |selectedUsage| and |selectedDataFormat|.
+      <dt> Otherwise
+        <dd> For each |type| in the |depthTypePreference| sequence, perform the following steps:
+          1. If |type|,|selectedUsage|,|selectedDataFormat| is not considered a <a lt="support the depth sensing configuration">supported depth sensing configuration</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+          1. Set |selectedType| to |type| and abort these nested steps.
+    </dl>
+  1. If |selectedType| is <code>null</code>, return <code>null</code> and abort these steps.
+  1. Return the [=depth sensing configuration=] of |selectedType|,|selectedUsage|,|selectedDataFormat|.
 
 </div>
 
@@ -286,12 +315,15 @@ const session = await navigator.xr.requestSession("immersive-ar", {
 partial interface XRSession {
   readonly attribute XRDepthUsage depthUsage;
   readonly attribute XRDepthDataFormat depthDataFormat;
+  readonly attribute XRDepthType? depthType;
 };
 </script>
 
 The {{XRSession/depthUsage}} describes depth sensing usage with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}.
 
 The {{XRSession/depthDataFormat}} describes depth sensing data format with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}.
+
+The {{XRSession/depthType}} describes the depth sensing type with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}. If the runtime only supports a single {{XRDepthType}}, this may return <code>null</code>.
 
 Obtaining depth data {#obtaining-data}
 ====================
@@ -647,17 +679,23 @@ Native depth sensing {#native-depth-sensing-section}
 
 Depth sensing specification assumes that the native device on top of which the depth sensing API is implemented provides a way to query device's <dfn>native depth sensing</dfn> capabilities. The device is said to support querying device's native depth sensing capabilities if it exposes a way of obtainig [=view=]-aligned depth buffer data. The depth buffer data MUST contain buffer dimensions, the information about the units used for the values stored in the buffer, and a <dfn>depth coordinates transformation matrix</dfn> that performs a coordinate system change from normalized view coordinates to normalized depth buffer coordinates. This transform should leave <code>z</code> coordinate of the transformed 3D vector unaffected.
 
+The device can <dfn>support depth sensing type</dfn> in 2 ways. If the device simply returns estimated depth values with minimal post-processing it is said to support {{XRDepthType/"raw"}} depth type. If the device or runtime can apply additional processing to "smooth" out noise from this data (e.g. into larger regions of the same depth value), it is said to support {{XRDepthType/"smooth"}} depth type.
+
+Note: "Raw" depth data is often accompanied by confidence values. The UA can choose to filter out depth data with a low confidence value when returning such data to the page.
+
 The device can <dfn>support depth sensing usage</dfn> in 2 ways. If the device is primarily capable of returning the depth data through CPU-accessible memory, it is said to support {{XRDepthUsage/"cpu-optimized"}} usage. If the device is primarily capable of returning the depth data through GPU-accessible memory, it is said to support {{XRDepthUsage/"gpu-optimized"}} usage.
 
 Note: The user agent can choose to support both usage modes (e.g. when the device is capable of providing both CPU- and GPU-accessible data, or by performing the transfer between CPU- and GPU-accessible data manually).
 
-The device can <dfn>support depth sensing data format</dfn> given depth sensing usage in the following ways. If, given the depth sensing usage, the device is able to return depth data as a buffer containing 16 bit unsigned integers, it is said to support the {{XRDepthDataFormat/"luminance-alpha"}} or {{XRDepthDataFormat/"unsigned-short"}} data format. If, given the depth sensing usage, the device is able to return depth data as a buffer containing 32 bit floating point values, it is said to support the {{XRDepthDataFormat/"float32"}} data format.
+The device can <dfn>support depth sensing data format</dfn> given depth sensing usage and type in the following ways. If, given the depth sensing usage and type, the device is able to return depth data as a buffer containing 16 bit unsigned integers, it is said to support the {{XRDepthDataFormat/"luminance-alpha"}} or {{XRDepthDataFormat/"unsigned-short"}} data format. If, given the depth sensing usage and type, the device is able to return depth data as a buffer containing 32 bit floating point values, it is said to support the {{XRDepthDataFormat/"float32"}} data format.
 
-The device is said to <dfn>support depth sensing usage and data format combination</dfn> if it <a lt="support depth sensing usage">supports depth sensing usage</a> and <a lt="support depth sensing data format">supports depth sensing data format</a> given the specified usage.
+A <dfn>depth sensing configuration</dfn> is represented by a combination of one {{XRDepthType}}, one {{XRDepthUsage}}, and one {{XRDepthDataFormat}}.
+
+The device is said to <dfn>support the depth sensing configuration</dfn> if it <a lt="support depth sensing type">supports the depth sensing type</a>, <a lt="support depth sensing usage">supports depth sensing usage</a>, and <a lt="support depth sensing data format">supports depth sensing data format</a> given the specified configuration.
 
 Note: the support of depth sensing API is not limited only to hardware classified as AR-capable, although it is expected that the feature will be more common in such devices. VR devices that contain appropriate sensors and/or use other techniques to provide depth buffer should also be able to provide the data necessary to implement depth sensing API.
 
-The device MUST have a <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the {{XRDepthStateInit/usagePreference}} array is empty, and a <dfn>preferred [=native depth sensing=] format</dfn> that MUST be used if the {{XRDepthStateInit/dataFormatPreference}} array is empty. The capability and format SHOULD reflect the most efficient ones of the device.
+The device MUST have a <dfn>preferred [=native depth sensing=] type</dfn> that MUST be used if the {{XRDepthStateInit/depthTypePreference}} array is empty, <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the {{XRDepthStateInit/usagePreference}} array is empty, and a <dfn>preferred [=native depth sensing=] format</dfn> that MUST be used if the {{XRDepthStateInit/dataFormatPreference}} array is empty. The capability and format SHOULD reflect the most efficient ones of the device, though they may be dependent upon each other.
 
 </section>
 
