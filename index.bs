@@ -252,43 +252,25 @@ In order to <dfn>find supported configuration combination</dfn> for depth sensin
 
   1. Let |depthTypePreference| be the value contained by the {{XRDepthStateInit/depthTypePreference}} key in |depthStateInit| if it is set, and an empty sequence otherwise.
   1. Let |selectedType| be <code>null</code>
-  1. If the |depthTypePreference| sequence contains a single value, set |selectedType| to that value.
-  1. If |selectedType| is not <code>null</code> and not considered a <a lt="support depth sensing type">supported depth sensing type</a> by the [=native depth sensing=] capabilities of the device, return <code>null</code> and abort these steps.
   1. Let |usagePreference| be the value contained by the {{XRDepthStateInit/usagePreference}} key in |depthStateInit|
   1. Let |selectedUsage| be <code>null</code>.
-  1. Initialize |selectedUsage| as follows:
-    <dl class="switch">
-      <dt class="switch">If the |usagePreference| sequence is empty
-        <dd> Initialize |selectedUsage| to the device's [=preferred native depth sensing capability=] for |selectedType|.
-      <dt> Otherwise
-        <dd>  For each |usage| in |usagePreference| sequence, perform the following steps:
-          1. If |usage| is not considered a <a lt="support depth sensing usage">supported depth sensing usage</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
-          1. Set |selectedUsage| to |usage| and abort these nested steps.
-      </dl>
-  1. If |selectedUsage| is <code>null</code>, return <code>null</code> and abort these steps.
   1. Let |dataFormatPreference| be the value contained by the {{XRDepthStateInit/dataFormatPreference}} key in |depthStateInit|
   1. Let |selectedDataFormat| be <code>null</code>.
-  1. Initialize |selectedDataFormat| as follows:
-    <dl class="switch">
-      <dt class="switch">If the |usagePreference| sequence is empty
-        <dd> Initialize |selectedDataFormat| to the device's [=preferred native depth sensing format=] for |selectedType| and |selectedUsage|.
-      <dt> Otherwise
-        <dd>  For each |dataFormat| in |dataFormatPreference|, perform the following steps:
-          1. If |selectedType|,|selectedUsage|,|dataFormat| is not considered a <a lt="support the depth sensing configuration">supported depth sensing configuration</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
-          1. Set |selectedDataFormat| to |dataFormat| and abort these nested steps.
-      </dl>
-  1. If |selectedDataFormat| is <code>null</code>, return <code>null</code> and abort these steps.
-  1. If |selectedType| is <code>null</code>, initialize |selectedType| as follows:
-    <dl class="switch">
-      <dt class="switch">If the |depthTypePreference| sequence is empty
-        <dd> Initialize |selectedType| to the device's [=preferred native depth sensing type=] for |selectedUsage| and |selectedDataFormat|.
-      <dt> Otherwise
-        <dd> For each |type| in the |depthTypePreference| sequence, perform the following steps:
-          1. If |type|,|selectedUsage|,|selectedDataFormat| is not considered a <a lt="support the depth sensing configuration">supported depth sensing configuration</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
-          1. Set |selectedType| to |type| and abort these nested steps.
-    </dl>
-  1. If |selectedType| is <code>null</code>, return <code>null</code> and abort these steps.
-  1. Return the [=depth sensing configuration=] of |selectedType|,|selectedUsage|,|selectedDataFormat|.
+  1. Let |processingOrder| be the sequence of (preferences, selection) pairs: [(|depthTypePreference|, |selectedType|), (|usagePreference|,|selectedUsage|),(|dataFormatPreference|,|selectedDataFormat|)]
+  1. For each (|preferences|, |selection|) in |processingOrder| perform the following steps
+    1. If |preferences| contains only a single value, set |selection| to that value.
+  1. For each (|preferences|, |selection|) in |processingOrder| perform the following steps:
+    1. If |selection| is not <code>null</code>, continue to the next entry.
+    1. If the |preferences| sequence is empty, continue to the next entry.
+    1. For each |preference| in |preferences|, preform the following steps:
+      1. If |preference| with the other values of |selectedType|,|selectedUsage|,|selectedDataFormat| is not considered a <a lt="support the depth sensing configuration">supported depth sensing configuration</a> by the [=native depth sensing=] capabilities of the device, continue to the next entry.
+      1. Set |selection| to |preference| and abort these nested steps.
+  1. For each (|preferences|, |selection|) in |processingOrder| perform the following steps:
+    1. If |selection| is not <code>null</code>, continue to the next entry.
+    1. Set |selection| to the value determined by the [=preferred native depth sensing capability=] with the other values of |selectedType|,|selectedUsage|,|selectedDataFormat|.
+  1. If any of |selectedType|,|selectedUsage|,|selectedDataFormat| are <code>null</code>, return <code>null</code> and abort these steps.
+  1. If |selectedType|,|selectedUsage|,|selectedDataFormat| is considered a <a lt="support the depth sensing configuration">supported depth sensing configuration</a> by the [=native depth sensing=] capabilities of the device return the [=depth sensing configuration=] of |selectedType|,|selectedUsage|,|selectedDataFormat| and abort these steps.
+  1. Return <code>null</code> and abort these steps.
 
 </div>
 
@@ -695,7 +677,7 @@ The device is said to <dfn>support the depth sensing configuration</dfn> if it <
 
 Note: the support of depth sensing API is not limited only to hardware classified as AR-capable, although it is expected that the feature will be more common in such devices. VR devices that contain appropriate sensors and/or use other techniques to provide depth buffer should also be able to provide the data necessary to implement depth sensing API.
 
-The device MUST have a <dfn>preferred [=native depth sensing=] type</dfn> that MUST be used if the {{XRDepthStateInit/depthTypePreference}} array is empty, <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the {{XRDepthStateInit/usagePreference}} array is empty, and a <dfn>preferred [=native depth sensing=] format</dfn> that MUST be used if the {{XRDepthStateInit/dataFormatPreference}} array is empty. The capability and format SHOULD reflect the most efficient ones of the device, though they may be dependent upon each other.
+For each of {{XRDepthStateInit/depthTypePreference}}, {{XRDepthStateInit/usagePreference}}, and {{XRDepthStateInit/dataFormatPreference}},  The device MUST have a <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the corresponding array is empty. The type, usage, and format SHOULD reflect the most efficient ones of the device, though they may be dependent upon each other.
 
 </section>
 
