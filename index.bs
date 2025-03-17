@@ -185,21 +185,21 @@ The following table summarizes the ways various data formats can be consumed:
     <tr>
       <td>{{XRDepthDataFormat/"luminance-alpha"}}</td>
       <td>[=GLenum/LUMINANCE_ALPHA=]</td>
-      <td>2 times 8 bit</dt>
+      <td>2 times 8 bit</td>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Uint16Array}}</td>
       <td>Inspect Luminance and Alpha channels to reassemble single value.</td>
     </tr>
     <tr>
       <td>{{XRDepthDataFormat/"float32"}}</td>
       <td>[=GLenum/R32F=]</td>
-      <td>32 bit</dt>
+      <td>32 bit</td>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Float32Array}}</td>
       <td>Inspect Red channel and use the value.</td>
     </tr>
     <tr>
       <td>{{XRDepthDataFormat/"unsigned-short"}}</td>
       <td>[=GLenum/R16UI=]</td>
-      <td>16 bit</dt>
+      <td>16 bit</td>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Uint16Array}}</td>
       <td>Inspect Red channel and use the value.</td>
     </tr>
@@ -527,7 +527,6 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
               <dd> Initialize |result|'s {{XRWebGLDepthInformation/imageIndex}} to <code>1</code>.
             <dt> Otherwise
               <dd> Initialize |result|'s {{XRWebGLDepthInformation/imageIndex}} to <code>0</code>.
-            </dl>
           </dl>
     1. Return |result|.
 
@@ -638,7 +637,7 @@ const depthInMeters = depthInfo.getDepthInMeters(x, y);
 
 </section>
 
-Native device concepts {#native-device-concepts} 
+Native device concepts {#native-device-concepts}
 ======================
 
 Native depth sensing {#native-depth-sensing-section}
