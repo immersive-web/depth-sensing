@@ -231,7 +231,7 @@ The {{XRDepthStateInit/usagePreference}} is an ordered sequence of {{XRDepthUsag
 
 The {{XRDepthStateInit/dataFormatPreference}} is an ordered sequence of {{XRDepthDataFormat}}s, used to describe the desired depth sensing data format for the session.
 
-The {{XRDepthStateInit/depthTypeRequest}} is an ordered sequence of {{XRDepthType}}s, used to describe the desired depth sensing type for the session, however, this request may be ignored by the user agent.
+The {{XRDepthStateInit/depthTypeRequest}} is an ordered sequence of {{XRDepthType}}s, used to describe the desired depth sensing type for the session. This request MAY be ignored by the user agent.
 
 The {{XRSessionInit}} dictionary is expanded by adding new {{XRSessionInit/depthSensing}} key. The key is optional in {{XRSessionInit}}, but it MUST be provided when [=depth-sensing=] is included in either {{XRSessionInit/requiredFeatures}} or {{XRSessionInit/optionalFeatures}}.
 
@@ -243,11 +243,11 @@ partial dictionary XRSessionInit {
 
 If the depth sensing feature is a required feature but the application did not supply a {{XRSessionInit/depthSensing}} key, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
 
-if the depth sensing feature is a required feature but the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}} is <code>null</code>, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
+If the depth sensing feature is a required feature but the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}} is <code>null</code>, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
 
 When an {{XRSession}} is created with depth sensing enabled, the {{XRSession/depthUsage}}, {{XRSession/depthDataFormat}}, and {{XRSession/depthType}} attributes MUST be set to the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}}.
 
-Note: The intention of the algorithm is to process preferences from most restrictive to least restrictive. Thus we begin processing items where only a single item is indicated, then multiple, and finally where no preference is indicated.
+Note: The intention of the algorithm is to process preferences from most restrictive to least restrictive. Thus, we begin processing items where only a single item is indicated, then multiple, and finally where no preference is indicated.
 
 <div class="algorithm" data-algorithm="find-supported-configuration">
 In order to <dfn>find supported configuration combination</dfn> for depth sensing API given |depthStateInit| dictionary, the user agent MUST run the following algorithm:
@@ -258,7 +258,7 @@ In order to <dfn>find supported configuration combination</dfn> for depth sensin
   1. Let |selectedUsage| be <code>null</code>.
   1. Let |dataFormatPreference| be the value contained by the {{XRDepthStateInit/dataFormatPreference}} key in |depthStateInit|
   1. Let |selectedDataFormat| be <code>null</code>.
-  1. Let |processingOrder| be the sequence of (preferences, selection) pairs, where selection is a reference: [(|depthTypeRequest|, |selectedType|), (|usagePreference|,|selectedUsage|),(|dataFormatPreference|,|selectedDataFormat|)]
+  1. Let |processingOrder| be the sequence of (preferences, selection) pairs, where selection is a reference to one of the variables introduced in the previous steps: [(|depthTypeRequest|, |selectedType|), (|usagePreference|,|selectedUsage|),(|dataFormatPreference|,|selectedDataFormat|)]
   1. For each (|preferences|, |selection|) in |processingOrder| perform the following steps
     1. If |preferences| contains only a single value, set |selection| to that value.
   1. For each (|preferences|, |selection|) in |processingOrder| perform the following steps:
@@ -421,7 +421,7 @@ In order to <dfn>create a CPU depth information instance</dfn> given {{XRFrame}}
     1. Let |time| be |frame|'s [=XRFrame/time=].
     1. Let |session| be |frame|'s {{XRFrame/session}}.
     1. Let |device| be the |session|'s [=XRSession/XR device=].
-    1. Let |nativeDepthInformation| be a result of querying |device| for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthUsage}} and {{XRSession/depthDataFormat}}.
+    1. Let |nativeDepthInformation| be a result of querying |device| for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthType}}, {{XRSession/depthUsage}}, and {{XRSession/depthDataFormat}}.
     1. If |nativeDepthInformation| is <code>null</code>, return <code>null</code> and abort these steps.
     1. If the depth buffer present in |nativeDepthInformation| meets user agent's criteria to [=block access=] to the depth data, return <code>null</code> and abort these steps.
     1. If the depth buffer present in |nativeDepthInformation| meets user agent's criteria to [=limit the amount of information=] available in depth buffer, adjust the depth buffer accordingly.
@@ -520,7 +520,7 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
     1. Let |time| be |frame|'s [=XRFrame/time=].
     1. Let |session| be |frame|'s {{XRFrame/session}}.
     1. Let |device| be the |session|'s [=XRSession/XR device=].
-    1. Let |nativeDepthInformation| be a result of querying |device|'s [=native depth sensing=] for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthUsage}} and {{XRSession/depthDataFormat}}.
+    1. Let |nativeDepthInformation| be a result of querying |device|'s [=native depth sensing=] for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthType}}, {{XRSession/depthUsage}}, and {{XRSession/depthDataFormat}}.
     1. If |nativeDepthInformation| is <code>null</code>, return <code>null</code> and abort these steps.
     1. If the depth buffer present in |nativeDepthInformation| meets user agent's criteria to [=block access=] to the depth data, return <code>null</code> and abort these steps.
     1. If the depth buffer present in |nativeDepthInformation| meets user agent's criteria to [=limit the amount of information=] available in depth buffer, adjust the depth buffer accordingly.
@@ -639,6 +639,8 @@ void main(void) {
 Interpreting the results {#results-interpretation}
 ========================
 
+If a given pixel is determined to have <dfn>invalid depth data</dfn> or the depth data cannot otherwise be determined, the user agent MUST return a depth value of 0.
+
 <section class="non-normative">
 
 The values stored in {{XRCPUDepthInformation/data}} and {{XRWebGLDepthInformation/texture}} represent distance from the camera plane to the real-world-geometry (as understood by the XR system). In the below example, the depth value at point <code>a = (x, y)</code> corresponds to the distance of point A to the camera plane. Specifically, the depth value does NOT represent the length of <b><i>aA</i></b> vector.
@@ -664,15 +666,15 @@ Native depth sensing {#native-depth-sensing-section}
 
 Depth sensing specification assumes that the native device on top of which the depth sensing API is implemented provides a way to query device's <dfn>native depth sensing</dfn> capabilities. The device is said to support querying device's native depth sensing capabilities if it exposes a way of obtainig [=view=]-aligned depth buffer data. The depth buffer data MUST contain buffer dimensions, the information about the units used for the values stored in the buffer, and a <dfn>depth coordinates transformation matrix</dfn> that performs a coordinate system change from normalized view coordinates to normalized depth buffer coordinates. This transform should leave <code>z</code> coordinate of the transformed 3D vector unaffected.
 
-The device can <dfn>support depth sensing type</dfn> in 2 ways. If the device simply returns estimated depth values with minimal post-processing it is said to support {{XRDepthType/"raw"}} depth type. If the device or runtime can apply additional processing to "smooth" out noise from this data (e.g. into larger regions of the same depth value), it is said to support {{XRDepthType/"smooth"}} depth type.
+The device can <dfn>support depth sensing type</dfn> in 2 ways. If the device simply returns estimated depth values with minimal post-processing, it is said to support {{XRDepthType/"raw"}} depth type. If the device or runtime can apply additional processing to "smooth" out noise from this data (e.g. into larger regions of the same depth value), it is said to support {{XRDepthType/"smooth"}} depth type.
 
-Note: "Raw" depth data is often accompanied by confidence values. The UA can choose to filter out depth data with a low confidence value when returning such data to the page.
+Note: "Raw" depth data is often accompanied by confidence values. The UA can choose to treat depth data with a low confidence value as [=invalid depth data=] when returning such data to the page.
 
 The device can <dfn>support depth sensing usage</dfn> in 2 ways. If the device is primarily capable of returning the depth data through CPU-accessible memory, it is said to support {{XRDepthUsage/"cpu-optimized"}} usage. If the device is primarily capable of returning the depth data through GPU-accessible memory, it is said to support {{XRDepthUsage/"gpu-optimized"}} usage.
 
 Note: The user agent can choose to support both usage modes (e.g. when the device is capable of providing both CPU- and GPU-accessible data, or by performing the transfer between CPU- and GPU-accessible data manually).
 
-The device can <dfn>support depth sensing data format</dfn> given depth sensing usage and type in the following ways. If, given the depth sensing usage and type, the device is able to return depth data as a buffer containing 16 bit unsigned integers, it is said to support the {{XRDepthDataFormat/"luminance-alpha"}} or {{XRDepthDataFormat/"unsigned-short"}} data format. If, given the depth sensing usage and type, the device is able to return depth data as a buffer containing 32 bit floating point values, it is said to support the {{XRDepthDataFormat/"float32"}} data format.
+The device can <dfn>support depth sensing data format</dfn> given depth sensing usage and type in the following ways. If, given the depth sensing usage and type, the device is able to return depth data as a buffer containing 16 bit unsigned integers, it is said to support the {{XRDepthDataFormat/"luminance-alpha"}} and {{XRDepthDataFormat/"unsigned-short"}} data formats. If, given the depth sensing usage and type, the device is able to return depth data as a buffer containing 32 bit floating point values, it is said to support the {{XRDepthDataFormat/"float32"}} data format.
 
 A <dfn>depth sensing configuration</dfn> is represented by a combination of one {{XRDepthType}}, one {{XRDepthUsage}}, and one {{XRDepthDataFormat}}.
 
