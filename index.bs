@@ -250,7 +250,7 @@ If the depth sensing feature is a required feature but the application did not s
 
 If the depth sensing feature is a required feature but the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}} is <code>null</code>, the user agent MUST treat this as an unresolved required feature and reject the {{XRSystem/requestSession(mode, options)}} promise with a {{NotSupportedError}}. If it was requested as an optional feature, the user agent MUST ignore the feature request and not enable depth sensing on the newly created session.
 
-When an {{XRSession}} is created with depth sensing enabled, the {{XRSession/depthUsage}}, {{XRSession/depthDataFormat}}, and {{XRSession/depthType}} attributes MUST be set to the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}}.
+When an {{XRSession}} is created with depth sensing enabled, the {{XRSession/depthUsage}}, {{XRSession/depthDataFormat}}, and {{XRSession/depthType}} attributes MUST be set to the result of <a lt="find supported configuration combination">finding supported configuration combination</a> algorithm invoked with {{XRDepthStateInit}}. {{XRSession/depthActive}} SHOULD default to <code>true</code>.
 
 Note: The intention of the algorithm is to process preferences from most restrictive to least restrictive. Thus, we begin processing items where only a single item is indicated, then multiple, and finally where no preference is indicated.
 
@@ -306,6 +306,7 @@ partial interface XRSession {
   readonly attribute XRDepthUsage depthUsage;
   readonly attribute XRDepthDataFormat depthDataFormat;
   readonly attribute XRDepthType? depthType;
+  attribute boolean? depthActive;
 };
 </script>
 
@@ -314,6 +315,8 @@ The {{XRSession/depthUsage}} describes depth sensing usage with which the sessio
 The {{XRSession/depthDataFormat}} describes depth sensing data format with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}.
 
 The {{XRSession/depthType}} describes the depth sensing type with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}. If the runtime only supports a single {{XRDepthType}} or otherwise ignored {XRDepthStateInit/depthTypeRequest}} this may return <code>null</code>.
+
+The {{XRSession/depthActive}} describes and attempts to set the current [=depth sensing active state=]. If this attribute is accessed or attempted to be set on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}. If the user agent or device does not support this attribute, they should return <code>null</code> on getting, and setting should be a <code>no-op</code>. Setting {{XRSession/depthActive}} to null should be a <code>no-op</code>. While the value is set immediately, it may be an indeterminate amount of frames before the user agent is able to begin returning depth data again when changing from <code>false</code> to <code>true</code>. It is up to the user agent to determine the most appropriate way to stop processing depth data when this is set to <code>true</code>.
 
 Obtaining depth data {#obtaining-data}
 ====================
@@ -429,6 +432,7 @@ In order to <dfn>create a CPU depth information instance</dfn> given {{XRFrame}}
     1. Let |time| be |frame|'s [=XRFrame/time=].
     1. Let |session| be |frame|'s {{XRFrame/session}}.
     1. Let |device| be the |session|'s [=XRSession/XR device=].
+    1. If {{XRSession/depthActive}} is <code>false</code>, return <code>null</code> and abort these steps.
     1. Let |nativeDepthInformation| be a result of querying |device| for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthType}}, {{XRSession/depthUsage}}, and {{XRSession/depthDataFormat}}.
     1. If |nativeDepthInformation| is <code>null</code>, return <code>null</code> and abort these steps.
     1. If the depth buffer present in |nativeDepthInformation| meets user agent's criteria to [=block access=] to the depth data, return <code>null</code> and abort these steps.
@@ -534,6 +538,7 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
           </dl>
     1. Let |session| be |frame|'s {{XRFrame/session}}.
     1. Let |device| be the |session|'s [=XRSession/XR device=].
+    1. If {{XRSession/depthActive}} is <code>false</code>, return <code>null</code> and abort these steps.
     1. Let |nativeDepthInformation| be a result of querying |device|'s [=native depth sensing=] for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthType}}, {{XRSession/depthUsage}}, and {{XRSession/depthDataFormat}}.
     1. If |nativeDepthInformation| is <code>null</code>, return <code>null</code> and abort these steps.
     1. If the depth buffer present in |nativeDepthInformation| meets user agent's criteria to [=block access=] to the depth data, return <code>null</code> and abort these steps.
@@ -697,6 +702,8 @@ The device is said to <dfn>support the depth sensing configuration</dfn> if it <
 Note: the support of depth sensing API is not limited only to hardware classified as AR-capable, although it is expected that the feature will be more common in such devices. VR devices that contain appropriate sensors and/or use other techniques to provide depth buffer should also be able to provide the data necessary to implement depth sensing API.
 
 For each of {{XRDepthStateInit/depthTypeRequest}}, {{XRDepthStateInit/usagePreference}}, and {{XRDepthStateInit/dataFormatPreference}},  The device MUST have a <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the corresponding array is empty. The type, usage, and format SHOULD reflect the most efficient ones of the device, though they may be dependent upon each other.
+
+The device can be said to have a <dfn>depth sensing active state</dfn>, which represents if depth sensing capabilities are actively running. This state may either be "started" (<code>true</code>) or "stopped" (<code>false</code>), and should begin as "started". If the native device cannot simulate this state, the user agent can simply not process any depth data when the state is otherwise "stopped".
 
 </section>
 
