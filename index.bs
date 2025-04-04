@@ -211,8 +211,7 @@ The following table summarizes the ways various data formats can be consumed:
       <td>[=GLenum/R16UI=]</td>
       <td>16 bit</td>
       <td>Interpret {{XRCPUDepthInformation/data}} as {{Uint16Array}}</td>
-      <td>Inspect Red channel and use the
-       value.</td>
+      <td>Inspect Red channel and use the value.</td>
     </tr>
   </tbody>
 </table>
@@ -331,9 +330,6 @@ interface XRDepthInformation {
   [SameObject] readonly attribute XRRigidTransform normDepthBufferFromNormView;
   readonly attribute float rawValueToMeters;
   readonly attribute XRView? view;
-
-  readonly attribute float depthNear;
-  readonly attribute float depthFar;
 };
 </script>
 
@@ -347,7 +343,7 @@ Note: if the applications intend to use the resulting depth buffer for texturing
 
 The {{XRDepthInformation/rawValueToMeters}} attribute contains the scale factor by which the raw depth values from a [=XRDepthInformation/depth buffer=] must be multiplied in order to get the depth in meters.
 
-The {{XRDepthInformation/depthNear}}, {{XRDepthInformation/depthFar}} and optional {{XRDepthInformation/view}} attribute contain the near and far field and the {{XRView}} respectively that were active when the {{XRSystem}} calculated the {{XRDepthInformation}}. This attribute MAY be used by experiences to better align with the real world. If the {{XRDepthInformation/view}} is not provided, the user MUST assume it is the same as the one from the current {{XRFrame}}'s {{XRViewerPose}}.
+The {{XRDepthInformation/view}} attribute contains the {{XRView}} that was active when the {{XRSystem}} calculated the {{XRDepthInformation}}. This attribute MAY be used by experiences to better align with the real world. If the {{XRDepthInformation/view}} is not provided, the user MUST assume it is the same as the one from the current {{XRFrame}}'s {{XRViewerPose}}.
 
 Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> that reflects the {{XRView}} from which the depth information instance was created.
 
@@ -547,8 +543,6 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
     1. Initialize |result|'s {{XRDepthInformation/normDepthBufferFromNormView}} to a new {{XRRigidTransform}}, based on |nativeDepthInformation|'s [=depth coordinates transformation matrix=].
     1. Initialize |result|'s {{XRWebGLDepthInformation/texture}} to an [=opaque texture=] containing the depth buffer returned in |nativeDepthInformation|.
     1. Initialize |result|'s {{XRDepthInformation/view}} to the {{XRView}} captured at |time|.
-    1. Initialize |result|'s {{XRDepthInformation/depthNear}} to the |device|'s [=native depth sensing=] near clip plane at |time|.
-    1. Initialize |result|'s {{XRDepthInformation/depthFar}} to the |device|'s [=native depth sensing=] far clip plane at |time|.
     1. Initialize |result|'s {{XRWebGLDepthInformation/textureType}} as follows:
           <dl class="switch">
             <dt> If the |result|'s {{XRWebGLDepthInformation/texture}} was created with a textureType of [=XRTextureType/texture-array=]:
