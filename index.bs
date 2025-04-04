@@ -224,6 +224,7 @@ dictionary XRDepthStateInit {
   required sequence<XRDepthUsage> usagePreference;
   required sequence<XRDepthDataFormat> dataFormatPreference;
   sequence<XRDepthType> depthTypeRequest;
+  boolean matchDepthView = true;
 };
 </script>
 
@@ -232,6 +233,10 @@ The {{XRDepthStateInit/usagePreference}} is an ordered sequence of {{XRDepthUsag
 The {{XRDepthStateInit/dataFormatPreference}} is an ordered sequence of {{XRDepthDataFormat}}s, used to describe the desired depth sensing data format for the session.
 
 The {{XRDepthStateInit/depthTypeRequest}} is an ordered sequence of {{XRDepthType}}s, used to describe the desired depth sensing type for the session. This request MAY be ignored by the user agent.
+
+The {{XRDepthStateInit/matchDepthView}} requests that {{XRDepthInformation/view}} of the depth information must be in sync with the {{XRView}}. If this is <code>true</code>, the {{XRSystem}} SHOULD return depth information that reflects the current frame. If this is <code>false</code>, the {{XRSystem}} MAY return depth information that was captured at an earlier point in time.
+
+NOTE: If {{XRDepthStateInit/matchDepthView}} is <code>false</code>, the author SHOULD do the reprojection using the [=XRDepthInformation/view=] from {{XRDepthInformation}}.
 
 The {{XRSessionInit}} dictionary is expanded by adding new {{XRSessionInit/depthSensing}} key. The key is optional in {{XRSessionInit}}, but it MUST be provided when [=depth-sensing=] is included in either {{XRSessionInit/requiredFeatures}} or {{XRSessionInit/optionalFeatures}}.
 
@@ -324,6 +329,7 @@ interface XRDepthInformation {
 
   [SameObject] readonly attribute XRRigidTransform normDepthBufferFromNormView;
   readonly attribute float rawValueToMeters;
+  readonly attribute XRView? view;
 };
 </script>
 
@@ -337,7 +343,9 @@ Note: if the applications intend to use the resulting depth buffer for texturing
 
 The {{XRDepthInformation/rawValueToMeters}} attribute contains the scale factor by which the raw depth values from a [=XRDepthInformation/depth buffer=] must be multiplied in order to get the depth in meters.
 
-Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> that stores {{XRView}} from which the depth information instance was created.
+The optional {{XRDepthInformation/view}} attribute contains the {{XRView}} that was active when the {{XRSystem}} calculated the {{XRDepthInformation}}. This attribute MAY be used by experiences to better align with the real world. If the {{XRDepthInformation/view}} is not provided, the user MUST assume it is the same as the one from the current {{XRFrame}}'s {{XRViewerPose}}.
+
+Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> that reflects the {{XRView}} from which the depth information instance was created.
 
 Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>depth buffer</dfn> that contains depth buffer data. Different {{XRDepthInformation}}s may store objects of different concrete types in the depth buffer.
 
@@ -517,7 +525,13 @@ When {{XRWebGLBinding/getDepthInformation(view)}} method is invoked on a {{XRWeb
 
 In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame}} |frame| and {{XRView}} |view|, the user agent MUST run the following steps:
     1. Let |result| be a new instance of {{XRWebGLDepthInformation}}.
-    1. Let |time| be |frame|'s [=XRFrame/time=].
+    1. Initialize |time| as follows:
+          <dl class="switch">
+            <dt> If the {{XRSession}} was created with {{XRDepthStateInit/matchDepthView}} set to <code>true</code>:
+              <dd> Let |time| be |frame|'s [=XRFrame/time=].
+            <dt> Otherwise
+              <dd> Let |time| be time that the |device| captured the depth information.
+          </dl>
     1. Let |session| be |frame|'s {{XRFrame/session}}.
     1. Let |device| be the |session|'s [=XRSession/XR device=].
     1. Let |nativeDepthInformation| be a result of querying |device|'s [=native depth sensing=] for the depth information valid as of |time|, for specified |view|, taking into account |session|'s {{XRSession/depthType}}, {{XRSession/depthUsage}}, and {{XRSession/depthDataFormat}}.
@@ -528,7 +542,7 @@ In order to <dfn>create a WebGL depth information instance</dfn> given {{XRFrame
     1. Initialize |result|'s {{XRDepthInformation/height}} to the height of the depth buffer returned in |nativeDepthInformation|.
     1. Initialize |result|'s {{XRDepthInformation/normDepthBufferFromNormView}} to a new {{XRRigidTransform}}, based on |nativeDepthInformation|'s [=depth coordinates transformation matrix=].
     1. Initialize |result|'s {{XRWebGLDepthInformation/texture}} to an [=opaque texture=] containing the depth buffer returned in |nativeDepthInformation|.
-    1. Initialize |result|'s [=XRDepthInformation/view=] to |view|.
+    1. Initialize |result|'s {{XRDepthInformation/view}} to the {{XRView}} captured at |time|.
     1. Initialize |result|'s {{XRWebGLDepthInformation/textureType}} as follows:
           <dl class="switch">
             <dt> If the |result|'s {{XRWebGLDepthInformation/texture}} was created with a textureType of [=XRTextureType/texture-array=]:
@@ -664,7 +678,7 @@ Native depth sensing {#native-depth-sensing-section}
 
 <section class="non-normative">
 
-Depth sensing specification assumes that the native device on top of which the depth sensing API is implemented provides a way to query device's <dfn>native depth sensing</dfn> capabilities. The device is said to support querying device's native depth sensing capabilities if it exposes a way of obtainig [=view=]-aligned depth buffer data. The depth buffer data MUST contain buffer dimensions, the information about the units used for the values stored in the buffer, and a <dfn>depth coordinates transformation matrix</dfn> that performs a coordinate system change from normalized view coordinates to normalized depth buffer coordinates. This transform should leave <code>z</code> coordinate of the transformed 3D vector unaffected.
+Depth sensing specification assumes that the native device on top of which the depth sensing API is implemented provides a way to query device's <dfn>native depth sensing</dfn> capabilities. The device is said to support querying device's native depth sensing capabilities if it exposes a way of obtaining depth buffer data. The depth buffer data MUST contain buffer dimensions, the information about the units used for the values stored in the buffer, a <dfn>depth coordinates transformation matrix</dfn> that performs a coordinate system change from normalized view coordinates to normalized depth buffer coordinates and optionally a {{XRDepthInformation/view}} that contains the {{XRView}} active when the {{XRSystem}} calculated the {{XRDepthInformation}}. This transform should leave <code>z</code> coordinate of the transformed 3D vector unaffected.
 
 The device can <dfn>support depth sensing type</dfn> in 2 ways. If the device simply returns estimated depth values with minimal post-processing, it is said to support {{XRDepthType/"raw"}} depth type. If the device or runtime can apply additional processing to "smooth" out noise from this data (e.g. into larger regions of the same depth value), it is said to support {{XRDepthType/"smooth"}} depth type.
 
