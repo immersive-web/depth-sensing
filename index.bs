@@ -306,7 +306,10 @@ partial interface XRSession {
   readonly attribute XRDepthUsage depthUsage;
   readonly attribute XRDepthDataFormat depthDataFormat;
   readonly attribute XRDepthType? depthType;
-  attribute boolean? depthActive;
+  readonly attribute boolean? depthActive;
+
+  void startDepth();
+  void stopDepth();
 };
 </script>
 
@@ -316,7 +319,23 @@ The {{XRSession/depthDataFormat}} describes depth sensing data format with which
 
 The {{XRSession/depthType}} describes the depth sensing type with which the session was configured. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}. If the runtime only supports a single {{XRDepthType}} or otherwise ignored {{XRDepthStateInit/depthTypeRequest}} this may return <code>null</code>.
 
-The {{XRSession/depthActive}} describes and attempts to set the current [=depth sensing active state=]. If this attribute is accessed or attempted to be set on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}. If the user agent or device does not support this attribute, they should return <code>null</code> on getting, and setting should be a <code>no-op</code>. Setting {{XRSession/depthActive}} to null should be a <code>no-op</code>. While the value is set immediately, it may be an indeterminate amount of frames before the user agent is able to begin returning depth data again when changing from <code>false</code> to <code>true</code>. It is up to the user agent to determine the most appropriate way to stop processing depth data when this is set to <code>true</code>.
+The {{XRSession/depthActive}} describes the current [=depth sensing active state=]. If this attribute is accessed on a session that does not have depth sensing enabled, the user agent MUST throw an {{InvalidStateError}}.  When this value is <code>false</code>, the user agent MUST reject attempts to get depth data. When this value is <code>true</code> the user agent MAY return depth data that is <code>null</code>. The user agent SHOULD return <code>true</code> when the [=depth sensing active state=] is "started" and <code>false</code> when the [=depth sensing active state=] is "stopped". It is up tp to the user agent what to return for and how to transition between these states and "starting" or "stopping".
+
+<div class="algorithm" data-algorithm="start-depth-sensing">
+
+When {{XRSession/startDepth()}} is invoked on an {{XRSession}}, the User Agent MUST run the following steps:
+
+1. If [=depth-sensing=] feature descriptor is not [=list/contain|contained=] in the |session|'s [=XRSession/XR device=]'s [=XR device/list of enabled features=] for |session|'s [=XRSession/mode=], [=exception/throw=] a {{NotSupportedError}} and abort these steps.
+1. If [=depth sensing active state=] is "started", throw an {{InvalidStateError}} and abort these steps.
+1. Set [=depth sensing active state=] to "starting".
+
+<div class="algorithm" data-algorithm="stop-depth-sensing">
+
+When {{XRSession/stopDepth()}} is invoked on an {{XRSession}}, the User Agent MUST run the following steps:
+
+1. If [=depth-sensing=] feature descriptor is not [=list/contain|contained=] in the |session|'s [=XRSession/XR device=]'s [=XR device/list of enabled features=] for |session|'s [=XRSession/mode=], [=exception/throw=] a {{NotSupportedError}} and abort these steps.
+1. If [=depth sensing active state=] is "stopped", throw an {{InvalidStateError}} and abort these steps.
+1. Set [=depth sensing active state=] to "stopping".
 
 Obtaining depth data {#obtaining-data}
 ====================
@@ -703,7 +722,7 @@ Note: the support of depth sensing API is not limited only to hardware classifie
 
 For each of {{XRDepthStateInit/depthTypeRequest}}, {{XRDepthStateInit/usagePreference}}, and {{XRDepthStateInit/dataFormatPreference}},  The device MUST have a <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the corresponding array is empty. The type, usage, and format SHOULD reflect the most efficient ones of the device, though they may be dependent upon each other.
 
-The device can be said to have a <dfn>depth sensing active state</dfn>, which represents if depth sensing capabilities are actively running. This state may either be "started" (<code>true</code>) or "stopped" (<code>false</code>), and should begin as "started". If the native device cannot simulate this state, the user agent can simply not process any depth data when the state is otherwise "stopped".
+The device can be said to have a <dfn>depth sensing active state</dfn>, which represents if depth sensing capabilities are actively running. This state may either be "started", "starting", "stopping", or "stopped" and should begin as "started" or "starting". If the native device cannot simulate this state, the user agent can simply not process any depth data when the state is otherwise "stopped". This state is internal to the user agent and not directly exposed to the page. It is up to the user agent to manage transitions away from "starting" or "stopping".
 
 </section>
 
