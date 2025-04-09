@@ -308,8 +308,8 @@ partial interface XRSession {
   readonly attribute XRDepthType? depthType;
   readonly attribute boolean? depthActive;
 
-  void startDepth();
-  void stopDepth();
+  undefined startDepth();
+  undefined stopDepth();
 };
 </script>
 
