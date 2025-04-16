@@ -731,7 +731,7 @@ Note: the support of depth sensing API is not limited only to hardware classifie
 
 For each of {{XRDepthStateInit/depthTypeRequest}}, {{XRDepthStateInit/usagePreference}}, and {{XRDepthStateInit/dataFormatPreference}},  The device MUST have a <dfn>preferred [=native depth sensing=] capability</dfn> that MUST be used if the corresponding array is empty. The type, usage, and format SHOULD reflect the most efficient ones of the device, though they may be dependent upon each other.
 
-The device can be said to have a <dfn>depth sensing active state</dfn>, which is a boolean representing if depth sensing capabilities are actively running. This state MUST begin as <code>true</code>. If the native device cannot simulate this state, the user agent SHOULD take steps to mitigate the performance impact of this feature being enabled when this state is <code>false</code>.
+The device can be said to have a <dfn>depth sensing active state</dfn>, which is a boolean representing if depth sensing capabilities are actively running. This state MUST begin as <code>true</code>. The user agent SHOULD take steps to mitigate the performance impact of this feature being enabled when this state is <code>false</code>.
 
 </section>
 
