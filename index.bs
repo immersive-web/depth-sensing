@@ -242,7 +242,7 @@ The {{XRDepthStateInit/dataFormatPreference}} is an ordered sequence of {{XRDept
 
 The {{XRDepthStateInit/depthTypeRequest}} is an ordered sequence of {{XRDepthType}}s, used to describe the desired depth sensing type for the session. This request MAY be ignored by the user agent.
 
-The {{XRDepthStateInit/matchDepthView}} requests that [=XRDepthInformation/view=] of the depth information must be aligned with the {{XRView}}. If this is <code>true</code>, the {{XRSystem}} SHOULD return depth information that reflects the current frame. If this is <code>false</code>, the {{XRSystem}} MAY return depth information that was captured at an earlier point in time.
+The {{XRDepthStateInit/matchDepthView}} requests that [=XRDepthInformation/view=] of the depth information MUST be aligned with the {{XRView}}. If this is <code>true</code>, the {{XRSystem}} SHOULD return depth information that reflects the current frame. If this is <code>false</code>, the {{XRSystem}} MAY return depth information that was captured at an earlier point in time.
 
 NOTE: If {{XRDepthStateInit/matchDepthView}} is <code>false</code>, the author SHOULD do the reprojection using the [=XRDepthInformation/view=] from {{XRDepthInformation}}.
 
