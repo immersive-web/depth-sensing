@@ -54,11 +54,14 @@ spec: WebXR Device API - Level 1; urlPrefix: https://www.w3.org/TR/webxr/#
     for: XRSession;
         type: dfn; text: mode; url: xrsession-mode
         type: dfn; text: XR device; url: xrsession-xr-device
-    type: interface; text: XRViewGeometry; url:xrviewcalibration-mixin
-    type: dfn; text: view geometry; url: view-calibration
+    type: interface; text: XRViewGeometry; url: xrviewgeometry-mixin
+    for: XRViewGeometry;
+        type: attribute; text: transform; url: dom-xrviewgeometry-transform
+        type: attribute; text: projectionMatrix; url: dom-xrviewgeometry-projectionmatrix
+    type: dfn; text: view geometry; url: view-geometry
     for: view geometry;
-        type: dfn; text: containing object; url: view-calibration-containing-object
-        type: dfn; text: projection matrix; url: view-calibration-projection-matrix
+        type: dfn; text: containing object; url: view-geometry-containing-object
+        type: dfn; text: projection matrix; url: view-geometry-projection-matrix
     for: XRView;
         type: dfn; text: frame; url: xrview-frame
     type:dfn; text: view; url: view
@@ -354,7 +357,7 @@ The {{XRDepthInformation/rawValueToMeters}} attribute contains the scale factor 
 
 The {{XRViewGeometry/transform}} is given in the associated [=XRDepthInformation/view=]'s [=view/reference space=].
 
-If the [=XRDepthInformation/sensor=] is aligned with the associated [=XRDepthInformation/view=], the {{XRViewGeometry/transfrom}} and {{XRViewGeometry/projectionMatrix}} MUST be equivalent to the identity transform. These attributes MAY otherwise be used by experiences to better align with the real world.
+If the [=XRDepthInformation/sensor=] is aligned with the associated [=XRDepthInformation/view=], the {{XRViewGeometry/transform}} and {{XRViewGeometry/projectionMatrix}} MUST be equivalent to the identity transform. These attributes MAY otherwise be used by experiences to better align with the real world.
 
 Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> which is the closest {{XRView}} to the [=XRDepthInformation/sensor=], and is used to retrieve the {{XRDepthInformation}}.
 
