@@ -388,7 +388,7 @@ The {{XRDepthInformation/rawValueToMeters}} attribute contains the scale factor 
 
 The {{XRViewGeometry/transform}} is given in the associated [=XRDepthInformation/view=]'s [=view/reference space=].
 
-If the [=XRDepthInformation/sensor=] is aligned with the associated [=XRDepthInformation/view=], the {{XRViewGeometry/transform}} and {{XRViewGeometry/projectionMatrix}} MUST be equivalent to the identity transform. These attributes MAY otherwise be used by experiences to better align with the real world.
+If the [=XRDepthInformation/sensor=] is aligned with the associated [=XRDepthInformation/view=], then all values included from {{XRViewGeometry}} MUST return the same values as the associated [=XRDepthInformation/view=] does.
 
 Each {{XRDepthInformation}} has an associated <dfn for=XRDepthInformation>view</dfn> which is the closest {{XRView}} to the [=XRDepthInformation/sensor=], and is used to retrieve the {{XRDepthInformation}}.
 
