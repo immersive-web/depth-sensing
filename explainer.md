@@ -236,7 +236,7 @@ interface XRCPUDepthInformation : XRDepthInformation {
   // Data format is determined by session's depthDataFormat attribute.
   [SameObject] readonly attribute ArrayBuffer data;
 
-  float getDepthInMeters(unsigned long column, unsigned long row);
+  float getDepthInMeters(float x, float y);
 };
 
 interface XRWebGLDepthInformation : XRDepthInformation {
